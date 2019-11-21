@@ -4,7 +4,7 @@ namespace SnakeAI.Shared
 {
 	public class Food
 	{
-		PVector pos;
+		public Vector pos;
 
 		public Food()
 		{
@@ -12,7 +12,7 @@ namespace SnakeAI.Shared
 			//int y = Core.SIZE + (int)Math.Floor((double)Core.Rand.Next(38)) * Core.SIZE;
 			int x = 400 + Core.SIZE + (int)Math.Floor((double)(Core.Rand.NextDouble() * 38)) * Core.SIZE;
 			int y = Core.SIZE + (int)Math.Floor((double)(Core.Rand.NextDouble() * 38)) * Core.SIZE;
-			pos = new PVector(x, y);
+			pos = new Vector(x, y);
 		}
 
 		public void show()

@@ -37,12 +37,12 @@ namespace SnakeAI.Shared
 		/// </summary>
 		public float[] decision;  
 
-		public PVector head;
+		public Vector head;
 
 		/// <summary>
 		/// snakes body
 		/// </summary>
-		public List<PVector> body;  
+		public List<Vector> body;  
 		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
@@ -54,17 +54,17 @@ namespace SnakeAI.Shared
 		public Snake() : this(Core.hidden_layers) { }
 
 		public Snake(int layers) {
-			head = new PVector(800, height / 2);
+			head = new Vector(800, height / 2);
 			food = new Food();
-			body = new List<PVector>();
+			body = new List<Vector>();
 			if (!Core.humanPlaying) {
 				vision = new float[24];
 				decision = new float[4];
 				foodList = new List<Food>();
 				foodList.Add(food.Clone());
 				brain = new NeuralNet(24, Core.hidden_nodes, 4, layers);
-				body.Add(new PVector(800, (height / 2) + Core.SIZE));
-				body.Add(new PVector(800, (height / 2) + (2 * Core.SIZE)));
+				body.Add(new Vector(800, (height / 2) + Core.SIZE));
+				body.Add(new Vector(800, (height / 2) + (2 * Core.SIZE)));
 				score += 2;
 			}
 		}
@@ -77,7 +77,7 @@ namespace SnakeAI.Shared
 			replay = true;
 			vision = new float[24];
 			decision = new float[4];
-			body = new List<PVector>();
+			body = new List<Vector>();
 			foodList = new List<Food>(foods.Count);
 			//clone all the food positions in the foodlist
 			foreach (Food f in foods) {  
@@ -85,9 +85,9 @@ namespace SnakeAI.Shared
 			}
 			food = foodList[foodItterate];
 			foodItterate++;
-			head = new PVector(800, height / 2);
-			body.Add(new PVector(800, (height / 2) + Core.SIZE));
-			body.Add(new PVector(800, (height / 2) + (2 * Core.SIZE)));
+			head = new Vector(800, height / 2);
+			body.Add(new Vector(800, (height / 2) + Core.SIZE));
+			body.Add(new Vector(800, (height / 2) + (2 * Core.SIZE)));
 			score += 2;
 		}
 
@@ -189,9 +189,9 @@ namespace SnakeAI.Shared
 				}
 			}
 			if (len >= 0) {
-				body.Add(new PVector(body[len].x, body[len].y));
+				body.Add(new Vector(body[len].x, body[len].y));
 			} else {
-				body.Add(new PVector(head.x, head.y));
+				body.Add(new Vector(head.x, head.y));
 			}
 			if (!replay) {
 				food = new Food();
@@ -286,35 +286,35 @@ namespace SnakeAI.Shared
 		/// </summary>
 		public void look() {  
 			vision = new float[24];
-			float[] temp = lookInDirection(new PVector(-Core.SIZE, 0));
+			float[] temp = lookInDirection(new Vector(-Core.SIZE, 0));
 			vision[0] = temp[0];
 			vision[1] = temp[1];
 			vision[2] = temp[2];
-			temp = lookInDirection(new PVector(-Core.SIZE, -Core.SIZE));
+			temp = lookInDirection(new Vector(-Core.SIZE, -Core.SIZE));
 			vision[3] = temp[0];
 			vision[4] = temp[1];
 			vision[5] = temp[2];
-			temp = lookInDirection(new PVector(0, -Core.SIZE));
+			temp = lookInDirection(new Vector(0, -Core.SIZE));
 			vision[6] = temp[0];
 			vision[7] = temp[1];
 			vision[8] = temp[2];
-			temp = lookInDirection(new PVector(Core.SIZE, -Core.SIZE));
+			temp = lookInDirection(new Vector(Core.SIZE, -Core.SIZE));
 			vision[9] = temp[0];
 			vision[10] = temp[1];
 			vision[11] = temp[2];
-			temp = lookInDirection(new PVector(Core.SIZE, 0));
+			temp = lookInDirection(new Vector(Core.SIZE, 0));
 			vision[12] = temp[0];
 			vision[13] = temp[1];
 			vision[14] = temp[2];
-			temp = lookInDirection(new PVector(Core.SIZE, Core.SIZE));
+			temp = lookInDirection(new Vector(Core.SIZE, Core.SIZE));
 			vision[15] = temp[0];
 			vision[16] = temp[1];
 			vision[17] = temp[2];
-			temp = lookInDirection(new PVector(0, Core.SIZE));
+			temp = lookInDirection(new Vector(0, Core.SIZE));
 			vision[18] = temp[0];
 			vision[19] = temp[1];
 			vision[20] = temp[2];
-			temp = lookInDirection(new PVector(-Core.SIZE, Core.SIZE));
+			temp = lookInDirection(new Vector(-Core.SIZE, Core.SIZE));
 			vision[21] = temp[0];
 			vision[22] = temp[1];
 			vision[23] = temp[2];
@@ -325,9 +325,9 @@ namespace SnakeAI.Shared
 		/// </summary>
 		/// <param name="direction"></param>
 		/// <returns></returns>
-		public float[] lookInDirection(PVector direction) {  
+		public float[] lookInDirection(Vector direction) {  
 			float[] look = new float[3];
-			PVector pos = new PVector(head.x, head.y);
+			Vector pos = new Vector(head.x, head.y);
 			float distance = 0;
 			bool foodFound = false;
 			bool bodyFound = false;

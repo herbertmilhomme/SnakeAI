@@ -46,6 +46,7 @@
     <Compile Include="NeuralNet.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vector.cs" />
     <Compile Include="Snake.cs" />
     <Compile Include="SnakeAI.cs" />
   </ItemGroup>
