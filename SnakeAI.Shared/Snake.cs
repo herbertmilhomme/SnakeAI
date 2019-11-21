@@ -54,7 +54,7 @@ namespace SnakeAI.Shared
 		public Snake() : this(Core.hidden_layers) { }
 
 		public Snake(int layers) {
-			head = new Vector(800, height / 2);
+			head = new Vector(800, Core.height / 2);
 			food = new Food();
 			body = new List<Vector>();
 			if (!Core.humanPlaying) {
@@ -63,8 +63,8 @@ namespace SnakeAI.Shared
 				foodList = new List<Food>();
 				foodList.Add(food.Clone());
 				brain = new NeuralNet(24, Core.hidden_nodes, 4, layers);
-				body.Add(new Vector(800, (height / 2) + Core.SIZE));
-				body.Add(new Vector(800, (height / 2) + (2 * Core.SIZE)));
+				body.Add(new Vector(800, (Core.height / 2) + Core.SIZE));
+				body.Add(new Vector(800, (Core.height / 2) + (2 * Core.SIZE)));
 				score += 2;
 			}
 		}
@@ -85,9 +85,9 @@ namespace SnakeAI.Shared
 			}
 			food = foodList[foodItterate];
 			foodItterate++;
-			head = new Vector(800, height / 2);
-			body.Add(new Vector(800, (height / 2) + Core.SIZE));
-			body.Add(new Vector(800, (height / 2) + (2 * Core.SIZE)));
+			head = new Vector(800, Core.height / 2);
+			body.Add(new Vector(800, (Core.height / 2) + Core.SIZE));
+			body.Add(new Vector(800, (Core.height / 2) + (2 * Core.SIZE)));
 			score += 2;
 		}
 
@@ -126,7 +126,7 @@ namespace SnakeAI.Shared
 		/// <param name="y"></param>
 		/// <returns></returns>
 		public bool wallCollide(float x, float y) {  
-			if (x >= width - (Core.SIZE) || x < 400 + Core.SIZE || y >= height - (Core.SIZE) || y < Core.SIZE) {
+			if (x >= Core.width - (Core.SIZE) || x < 400 + Core.SIZE || y >= Core.height - (Core.SIZE) || y < Core.SIZE) {
 				return true;
 			}
 			return false;

@@ -7,6 +7,8 @@ namespace SnakeAI.Shared
 {
 	public class Core
 	{
+		public static readonly int height;
+		public static readonly int width;
 		public const int SIZE = 20;
 		public const int hidden_nodes = 16;
 		public const int hidden_layers = 2;
@@ -34,7 +36,7 @@ namespace SnakeAI.Shared
 		public static bool seeVision = false;
 		public static bool modelLoaded = false;
 
-		PFont font;
+		//PFont font;
 
 		public static List<int> evolution;
 
@@ -89,7 +91,7 @@ namespace SnakeAI.Shared
 
 		public void setup()
 		{
-			font = createFont("agencyfb-bold.ttf", 32);
+			//font = createFont("agencyfb-bold.ttf", 32);
 			evolution = new List<int>();
 			graphButton = new Button(349, 15, 100, 30, "Graph");
 			loadButton = new Button(249, 15, 100, 30, "Load");
