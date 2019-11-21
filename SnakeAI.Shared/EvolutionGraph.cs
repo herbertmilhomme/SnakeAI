@@ -29,9 +29,9 @@ namespace SnakeAI.Shared
 			textAlign(CENTER, CENTER);
 			text("Generation", width / 2, height - 10);
 			translate(10, height / 2);
-			rotate(PI / 2);
+			rotate(System.Math.PI / 2);
 			text("Score", 0, 0);
-			rotate(-PI / 2);
+			rotate(-System.Math.PI / 2);
 			translate(-10, -height / 2);
 			textSize(10);
 			float x = 50;
