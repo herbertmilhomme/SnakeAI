@@ -8,8 +8,10 @@ namespace SnakeAI.Shared
 
 		public Food()
 		{
-			int x = 400 + Core.SIZE + Math.Floor(new System.Random().Next(38)) * Core.SIZE;
-			int y = Core.SIZE + Math.Floor(new System.Random().Next(38)) * Core.SIZE;
+			//int x = 400 + Core.SIZE + (int)Math.Floor((double)Core.Rand.Next(38)) * Core.SIZE;
+			//int y = Core.SIZE + (int)Math.Floor((double)Core.Rand.Next(38)) * Core.SIZE;
+			int x = 400 + Core.SIZE + (int)Math.Floor((double)(Core.Rand.NextDouble() * 38)) * Core.SIZE;
+			int y = Core.SIZE + (int)Math.Floor((double)(Core.Rand.NextDouble() * 38)) * Core.SIZE;
 			pos = new PVector(x, y);
 		}
 

@@ -126,7 +126,8 @@ namespace SnakeAI.Shared
 		/// <returns></returns>
 		public Snake selectParent()
 		{  
-			float rand = new System.Random().Next(fitnessSum);
+			//float rand = Core.Rand.Next(fitnessSum);
+			float rand = (float)(Core.Rand.NextDouble() * fitnessSum);
 			float summation = 0;
 			for (int i = 0; i < snakes.Length; i++)
 			{

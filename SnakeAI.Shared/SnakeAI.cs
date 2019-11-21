@@ -51,6 +51,37 @@ namespace SnakeAI.Shared
 
 		Population pop;
 
+		#region Custom Rand Function
+		/// <summary>
+		/// Constantly revolving random, that won't repeat the same seed number twice, 
+		/// until it cycles thru all possible seed values
+		/// </summary>
+		public static Random Rand { get { return new Random(Seed()); } }
+		/// <summary>
+		/// Constantly revolving random, that uses the same seed number that was previously used
+		/// </summary>
+		public static Random RandWithSetSeed { get { return new Random(Seed(true)); } }
+		private static System.UInt16? seed;// = 0x0000; //{ get; set; }
+		public static UInt16 Seed(bool useFixedSeed = false)
+		{
+			//lock (Rand)
+			//{
+			if (!seed.HasValue)
+			{
+				//seed = (UInt16)new Random().Next(0, UInt16.MaxValue);
+				seed = (UInt16)new Random(DateTime.Now.Millisecond).Next(0, UInt16.MaxValue);
+				seed ^= (UInt16)System.DateTime.Now.Ticks;
+				seed &= UInt16.MaxValue;
+			}
+			if (!useFixedSeed)
+			{
+				seed = (UInt16)(seed * 0x41C64E6D + 0x6073);
+			}
+			return seed.Value;
+			//}
+		}
+		#endregion
+
 		public void settings()
 		{
 			size(1200, 800);

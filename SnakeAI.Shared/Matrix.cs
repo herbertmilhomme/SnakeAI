@@ -74,7 +74,9 @@ namespace SnakeAI.Shared
 			{
 				for (int j = 0; j < cols; j++)
 				{
-					matrix[i][j] = new System.Random().Next(-1, 1);
+					//matrix[i][j] = Core.Rand.Next(-1, 1);
+					//matrix[i][j] = Core.Rand.Next(3) - 1;
+					matrix[i][j] = (float)(Core.Rand.NextDouble() * 2 - 1);
 				}
 			}
 		}
@@ -137,7 +139,7 @@ namespace SnakeAI.Shared
 			{
 				for (int j = 0; j < cols; j++)
 				{
-					float rand = new System.Random().Next(1);
+					float rand = (float)Core.Rand.NextDouble();
 					if (rand < mutationRate)
 					{
 						matrix[i][j] += randomGaussian() / 5;
@@ -159,8 +161,10 @@ namespace SnakeAI.Shared
 		{
 			Matrix child = new Matrix(rows, cols);
 
-			int randC = (int)Math.Floor((double)new System.Random().Next(cols));
-			int randR = (int)Math.Floor((double)new System.Random().Next(rows));
+			//int randC = (int)Math.Floor((double)Core.Rand.Next(cols));
+			//int randR = (int)Math.Floor((double)Core.Rand.Next(rows));
+			int randC = (int)Math.Floor((double)(Core.Rand.NextDouble() * cols));
+			int randR = (int)Math.Floor((double)(Core.Rand.NextDouble() * rows));
 
 			for (int i = 0; i < rows; i++)
 			{
@@ -190,6 +194,18 @@ namespace SnakeAI.Shared
 				}
 			}
 			return clone;
+		}
+
+		private static float randomGaussian()
+		{
+			//Random rand = new Random(); //reuse this if you are generating many
+			double u1 = 1.0 - Core.Rand.NextDouble(); //uniform(0,1] random doubles
+			double u2 = 1.0 - Core.Rand.NextDouble();
+			double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+						 Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+			double randNormal = 0 + 1 * randStdNormal;
+						 //mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
+			return (float)randNormal;
 		}
 	}
 }
