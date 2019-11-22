@@ -13,9 +13,9 @@ namespace SnakeAI.Shared
 			this.y = y;
 		}
 
-		internal void Add(Vector direction)
+		public void Add(Vector direction)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 	}
 }
