@@ -17,7 +17,7 @@ namespace SnakeAI.Shared
 		/// </summary>
 		public const int fps = 100;
 
-		int highscore = 0;
+		protected int highscore = 0;
 
 		public static float mutationRate = 0.05f;
 		float defaultmutation = mutationRate;
@@ -48,10 +48,10 @@ namespace SnakeAI.Shared
 
 		EvolutionGraph graph;
 
-		Snake snake;
-		Snake model;
+		protected Snake snake;
+		protected Snake model;
 
-		Population pop;
+		protected Population pop;
 
 		#region Custom Rand Function
 		/// <summary>
