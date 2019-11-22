@@ -1,14 +1,21 @@
-﻿namespace SnakeAI.Shared
+﻿using System;
+
+namespace SnakeAI.Shared
 {
 	public struct Vector
 	{
-		public int x;
-		public int y;
+		public float x;
+		public float y;
 
-		public Vector(int x, int y)
+		public Vector(float x, float y)
 		{
 			this.x = x;
 			this.y = y;
+		}
+
+		internal void Add(Vector direction)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

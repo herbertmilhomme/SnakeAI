@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace SnakeAI.Shared
 {
-	public class Snake {
+	public class Snake
+	{
 
 		public int score = 1;
 		/// <summary>
@@ -135,19 +136,20 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// show the snake
 		/// </summary>
-		public void show() {  
-			food.show();
-			fill(255);
-			stroke(0);
-			for (int i = 0; i < body.Count; i++) {
-				rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
-			}
-			if (dead) {
-				fill(150);
-			} else {
-				fill(255);
-			}
-			rect(head.x, head.y, Core.SIZE, Core.SIZE);
+		public virtual void show()
+		{  
+			//food.show();
+			//fill(255);
+			//stroke(0);
+			//for (int i = 0; i < body.Count; i++) {
+			//	rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
+			//}
+			//if (dead) {
+			//	fill(150);
+			//} else {
+			//	fill(255);
+			//}
+			//rect(head.x, head.y, Core.SIZE, Core.SIZE);
 		}
 
 		/// <summary>
@@ -213,20 +215,27 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// shift the body to follow the head
 		/// </summary>
-		public void shiftBody() {  
-			float tempx = head.x;
-			float tempy = head.y;
+		public void shiftBody()
+		{  
+			//float tempx = head.x;
+			//float tempy = head.y;
+			Vector tempv = new Vector(head.x, head.y);
 			head.x += xVel;
 			head.y += yVel;
-			float temp2x;
-			float temp2y;
-			for (int i = 0; i < body.Count; i++) {
-				temp2x = body[i].x;
-				temp2y = body[i].y;
-				body[i].x = tempx;
-				body[i].y = tempy;
-				tempx = temp2x;
-				tempy = temp2y;
+			//float temp2x;
+			//float temp2y;
+			Vector temp2v;
+			for (int i = 0; i < body.Count; i++)
+			{
+				//temp2x = body[i].x;
+				//temp2y = body[i].y;
+				temp2v = new Vector(body[i].x, body[i].y);
+				//body[i].x = tempx;
+				//body[i].y = tempy;
+				body[i] = temp2v;
+				//tempx = temp2x;
+				//tempy = temp2y;
+				tempv = temp2v;
 			}
 		}
 
@@ -325,7 +334,8 @@ namespace SnakeAI.Shared
 		/// </summary>
 		/// <param name="direction"></param>
 		/// <returns></returns>
-		public float[] lookInDirection(Vector direction) {  
+		public virtual float[] lookInDirection(Vector direction)
+		{  
 			float[] look = new float[3];
 			Vector pos = new Vector(head.x, head.y);
 			float distance = 0;
@@ -333,7 +343,8 @@ namespace SnakeAI.Shared
 			bool bodyFound = false;
 			pos.Add(direction);
 			distance += 1;
-			while (!wallCollide(pos.x, pos.y)) {
+			while (!wallCollide(pos.x, pos.y)) 
+			{
 				if (!foodFound && foodCollide(pos.x, pos.y)) {
 					foodFound = true;
 					look[0] = 1;
@@ -342,31 +353,31 @@ namespace SnakeAI.Shared
 					bodyFound = true;
 					look[1] = 1;
 				}
-				if (replay && Core.seeVision) {
-					stroke(0, 255, 0);
-					point(pos.x, pos.y);
-					if (foodFound) {
-						noStroke();
-						fill(255, 255, 51);
-						ellipseMode(CENTER);
-						ellipse(pos.x, pos.y, 5, 5);
-					}
-					if (bodyFound) {
-						noStroke();
-						fill(102, 0, 102);
-						ellipseMode(CENTER);
-						ellipse(pos.x, pos.y, 5, 5);
-					}
-				}
+				//if (replay && Core.seeVision) {
+				//	stroke(0, 255, 0);
+				//	point(pos.x, pos.y);
+				//	if (foodFound) {
+				//		noStroke();
+				//		fill(255, 255, 51);
+				//		ellipseMode(CENTER);
+				//		ellipse(pos.x, pos.y, 5, 5);
+				//	}
+				//	if (bodyFound) {
+				//		noStroke();
+				//		fill(102, 0, 102);
+				//		ellipseMode(CENTER);
+				//		ellipse(pos.x, pos.y, 5, 5);
+				//	}
+				//}
 				pos.Add(direction);
 				distance += 1;
 			}
-			if (replay && Core.seeVision) {
-				noStroke();
-				fill(0, 255, 0);
-				ellipseMode(CENTER);
-				ellipse(pos.x, pos.y, 5, 5);
-			}
+			//if (replay && Core.seeVision) {
+			//	noStroke();
+			//	fill(0, 255, 0);
+			//	ellipseMode(CENTER);
+			//	ellipse(pos.x, pos.y, 5, 5);
+			//}
 			look[2] = 1 / distance;
 			return look;
 		}

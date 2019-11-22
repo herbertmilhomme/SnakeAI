@@ -1,6 +1,6 @@
 namespace SnakeAI.Shared
 {
-	public class Button
+	public abstract class Button
 	{
 		float X, Y, W, H;
 		string text;
@@ -22,17 +22,17 @@ namespace SnakeAI.Shared
 			return false;
 		}
 
-		public void show()
-		{
-			fill(255);
-			stroke(0);
-			rectMode(CENTER);
-			rect(X, Y, W, H);
-			textSize(22);
-			textAlign(CENTER, CENTER);
-			fill(0);
-			noStroke();
-			text(text, X, Y - 3);
-		}
+		public abstract void show();
+		//{
+		//	fill(255);
+		//	stroke(0);
+		//	rectMode(CENTER);
+		//	rect(X, Y, W, H);
+		//	textSize(22);
+		//	textAlign(CENTER, CENTER);
+		//	fill(0);
+		//	noStroke();
+		//	text(text, X, Y - 3);
+		//}
 	}
 }

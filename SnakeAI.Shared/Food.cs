@@ -15,11 +15,11 @@ namespace SnakeAI.Shared
 			pos = new Vector(x, y);
 		}
 
-		public void show()
+		public virtual void show()
 		{
-			stroke(0);
-			fill(255, 0, 0);
-			rect(pos.x, pos.y, Core.SIZE, Core.SIZE);
+			//stroke(0);
+			//fill(255, 0, 0);
+			//rect(pos.x, pos.y, Core.SIZE, Core.SIZE);
 		}
 
 		public Food Clone()
