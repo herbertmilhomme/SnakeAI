@@ -56,15 +56,21 @@ namespace SnakeAI.WinForms
 		private Snake snake { get; set; }
 		private Snake model { get; set; }
 
-		public GameManager()
+		public GameManager() : base()
 		{
-			m_Width = 16;
-			m_Height = 16;
+			m_Width = 20;
+			m_Height = 20;
 			m_Speed = 8;
 			m_Score = 0;
 			m_Points = 100;
 			m_GameOver = false;
 			m_Direction = eDirection.Down;
+		}
+
+		public GameManager(int w, int h) : this()
+		{
+			Core.width = w;
+			Core.height = h;
 		}
 
 		public virtual void setup()

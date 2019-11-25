@@ -14,17 +14,23 @@ namespace SnakeAI.WinForms
 {
 	public partial class GameCanvasForm : Form
 	{
-
 		private Snake m_Snake;
 		private Piece m_Fruit;
 		private GameManager m_GameManager;
 
 		public GameCanvasForm()
 		{
+			InitCustomLabelFont();
 			InitializeComponent();
+			GenLabel.Parent = Background;
+			RedLabel.Parent = Background;
+			BlueLabel.Parent = Background;
+			ScoreLabel.Parent = Background;
+			HighscoreLabel.Parent = Background;
+			MutationLabel.Parent = Background;
 			m_Snake = new Snake();
 			m_Fruit = new Piece();
-			m_GameManager = new GameManager();
+			m_GameManager = new GameManager(w: Canvas.Size.Width, h: Canvas.Size.Height);
 
 			GameTimer.Interval = 1000 / m_GameManager.Speed;
 			GameTimer.Tick += UpdateScreen;
@@ -39,14 +45,15 @@ namespace SnakeAI.WinForms
 			GenerateFruit();
 		}
 
+		//ToDo: Add `SnakeAI.Core.Draw()` here...
 		private void UpdateScreen(object sender, EventArgs e)
 		{
 			if (m_GameManager.GameOver)
 			{
-				if (UserInputController.KeyPressed(Keys.Enter))
-				{
+				//if (UserInputController.KeyPressed(Keys.Enter))
+				//{
 					StartGame();
-				}
+				//}
 			}
 			else
 			{
@@ -67,11 +74,11 @@ namespace SnakeAI.WinForms
 
 		private void ResetSettings()
 		{
-			m_GameManager = new GameManager();
+			m_GameManager = new GameManager(w: Canvas.Size.Width, h: Canvas.Size.Height);
 			m_Snake.Body.Clear();
-			GameOverPic.Hide();
-			GameOverLabel.Hide();
-			Piece head = new Piece { X = 10, Y = 5 };
+			//GameOverPic.Hide();
+			//GameOverLabel.Hide();
+			Piece head = new Piece { X = 10, Y = 5 };//(int)(Canvas.Size.Height/2)
 			m_Snake.Add(head);
 			ScoreLabel.Text = m_GameManager.Score.ToString();
 		}
@@ -79,42 +86,54 @@ namespace SnakeAI.WinForms
 		private void Canvas_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics canvas = e.Graphics;
-
+			//canvas.DrawRectangle(Pens.White, Canvas.Bounds);
+			//ControlPaint.DrawBorder(canvas, Canvas.Bounds, Color.White, ButtonBorderStyle.Solid);
+			ControlPaint.DrawBorder(canvas, new Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height), Color.White, ButtonBorderStyle.Solid);
+			#region Snake Game
 			if (!m_GameManager.GameOver)
 			{
 				for (int i = 0; i < m_Snake.Length; i++)
 				{
 					Brush snakeColour;
 					if (i == 0)
-						snakeColour = Brushes.Black;     //Draw head
+						snakeColour = Brushes.White;     //Draw head
 					else
 						snakeColour = Brushes.Yellow;    //Rest of body
 
-					canvas.FillEllipse(snakeColour,
+					canvas.FillRectangle(snakeColour,
 						new Rectangle(m_Snake.Body[i].X * m_GameManager.Width,
 									  m_Snake.Body[i].Y * m_GameManager.Height,
 									  m_GameManager.Width, m_GameManager.Height));
 
 
-					canvas.FillEllipse(Brushes.Red,
+					canvas.FillRectangle(Brushes.Red,
 						new Rectangle(m_Fruit.X * m_GameManager.Width,
 							 m_Fruit.Y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
+				}
+				for (int x = 1; x < Canvas.Size.Width / m_GameManager.Width; x++)
+				{
+					canvas.DrawLine(Pens.Black, x1: x * m_GameManager.Width, y1: 1, x2: x * m_GameManager.Width, y2: Canvas.Size.Height-2);
+				}
+				for (int y = 1; y < Canvas.Size.Height/m_GameManager.Height; y++)
+				{
+					canvas.DrawLine(Pens.Black, x1: 1, y1: y * m_GameManager.Height, x2: Canvas.Size.Width-2, y2: y * m_GameManager.Height);
 				}
 			}
 			else
 			{
-				GameOver(); 
+				//GameOver(); 
 			}
+			#endregion
 		}
 
-		private void GameOver()
-		{
-			string gameOver = "Your final score is: " + m_GameManager.Score + "\nPress enter to try again!";
-			GameOverLabel.Font = new Font("Arial", 16, FontStyle.Bold);
-			GameOverLabel.Text = gameOver;
-			GameOverPic.Show();
-			GameOverLabel.Show();
-		}
+		//private void GameOver()
+		//{
+		//	string gameOver = "Your final score is: " + m_GameManager.Score + "\nPress enter to try again!";
+		//	GameOverLabel.Font = new Font("Arial", 16, FontStyle.Bold);
+		//	GameOverLabel.Text = gameOver;
+		//	GameOverPic.Show();
+		//	GameOverLabel.Show();
+		//}
 
 		private void GenerateFruit()
 		{
@@ -210,16 +229,6 @@ namespace SnakeAI.WinForms
 		private void GameCanvasForm_KeyUp(object sender, KeyEventArgs e)
 		{
 			UserInputController.ChangeState(e.KeyCode, false);
-		}
-
-		private void label1_Click(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void Canvas_Click(object sender, EventArgs e)
-		{
-
 		}
 	}
 }
