@@ -231,8 +231,8 @@ namespace SnakeAI.WinForms
 			// GameCanvasForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-			this.ClientSize = new System.Drawing.Size(1200, 800);
 			this.Size = new System.Drawing.Size(1200, 800);
+			this.ClientSize = new System.Drawing.Size(Size.Width + 40, Size.Height + 40);
 			this.Controls.Add(this.Canvas);
 			this.Controls.Add(this.MutationLabel);
 			this.Controls.Add(this.GenLabel);
