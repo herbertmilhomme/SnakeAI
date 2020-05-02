@@ -13,6 +13,12 @@ namespace SnakeAI.WinForms
 			//ControlPaint.DrawBorder(canvas, new Rectangle(400, 0, 1, Canvas.Size.Height), Color.White, ButtonBorderStyle.Solid);
 
 			#region Neural Net
+			float x = 0;
+			float y = 0;
+			float w = 360;
+			float h = 790;
+			float[] vision;
+			float[] decision;
 			//float space = 5;
 			//float nSize = (h - (space * (iNodes - 2))) / iNodes;
 			//float nSpace = (w - (weights.Length * nSize)) / weights.Length;
@@ -30,6 +36,7 @@ namespace SnakeAI.WinForms
 			//
 			////Layer Count
 			//int lc = 0;  
+			//Brushes fill;
 			//
 			////DRAW NODES
 			//for (int i = 0; i < iNodes; i++)
@@ -37,19 +44,19 @@ namespace SnakeAI.WinForms
 			//	//DRAW INPUTS
 			//	if (vision[i] != 0)
 			//	{
-			//		fill(0, 255, 0);
+			//		fill = Brushes.Black; //(0, 255, 0);
 			//	}
 			//	else
 			//	{
-			//		fill(255);
+			//		fill = Brushes.Black; //(255);
 			//	}
-			//	stroke(0);
-			//	ellipseMode(CORNER);
-			//	ellipse(x, y + (i * (nSize + space)), nSize, nSize);
-			//	textSize(nSize / 2);
-			//	textAlign(CENTER, CENTER);
-			//	fill(0);
-			//	text(i, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space)));
+			//	//stroke(0);
+			//	//ellipseMode(CORNER);
+			//	canvas.FillEllipse(x, y + (i * (nSize + space)), nSize, nSize);
+			//	//textSize(nSize / 2);
+			//	//textAlign(CENTER, CENTER);
+			//	//fill(0);
+			//	//Text = string.Format(i);//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
 			//}
 			//
 			//lc++;
@@ -59,10 +66,10 @@ namespace SnakeAI.WinForms
 			//	for (int i = 0; i < hNodes; i++)
 			//	{  
 			//		//DRAW HIDDEN
-			//		fill(255);
-			//		stroke(0);
-			//		ellipseMode(CORNER);
-			//		ellipse(x + (lc * nSize) + (lc * nSpace), y + hBuff + (i * (nSize + space)), nSize, nSize);
+			//		fill = Brushes.Black; //(255);
+			//		//stroke(0);
+			//		//ellipseMode(CORNER);
+			//		canvas.FillEllipse(x + (lc * nSize) + (lc * nSpace), y + hBuff + (i * (nSize + space)), nSize, nSize);
 			//	}
 			//	lc++;
 			//}
@@ -72,18 +79,19 @@ namespace SnakeAI.WinForms
 			//	//DRAW OUTPUTS
 			//	if (i == maxIndex)
 			//	{
-			//		fill(0, 255, 0);
+			//		fill = Brushes.Black; //(0, 255, 0);
 			//	}
 			//	else
 			//	{
-			//		fill(255);
+			//		fill = Brushes.Black; //(255);
 			//	}
-			//	stroke(0);
-			//	ellipseMode(CORNER);
-			//	ellipse(x + (lc * nSpace) + (lc * nSize), y + oBuff + (i * (nSize + space)), nSize, nSize);
+			//	//stroke(0);
+			//	//ellipseMode(CORNER);
+			//	canvas.FillEllipse(x + (lc * nSpace) + (lc * nSize), y + oBuff + (i * (nSize + space)), nSize, nSize);
 			//}
 			//
 			//lc = 1;
+			//Pens stroke;
 			//
 			////DRAW WEIGHTS
 			//for (int i = 0; i < weights[0].rows; i++)
@@ -93,13 +101,13 @@ namespace SnakeAI.WinForms
 			//	{
 			//		if (weights[0].matrix[i][j] < 0)
 			//		{
-			//			stroke(255, 0, 0);
+			//			stroke = Pens.Blue; //(255, 0, 0);
 			//		}
 			//		else
 			//		{
-			//			stroke(0, 0, 255);
+			//			stroke = Pens.Red; //(0, 0, 255);
 			//		}
-			//		line(x + nSize, y + (nSize / 2) + (j * (space + nSize)), x + nSize + nSpace, y + hBuff + (nSize / 2) + (i * (space + nSize)));
+			//		canvas.DrawLine(stroke, x1: x + nSize, y1: y + (nSize / 2) + (j * (space + nSize)), x2: x + nSize + nSpace, y2: y + hBuff + (nSize / 2) + (i * (space + nSize)));
 			//	}
 			//}
 			//
@@ -114,13 +122,13 @@ namespace SnakeAI.WinForms
 			//		{
 			//			if (weights[a].matrix[i][j] < 0)
 			//			{
-			//				stroke(255, 0, 0);
+			//				stroke = Pens.Blue; //(255, 0, 0);
 			//			}
 			//			else
 			//			{
-			//				stroke(0, 0, 255);
+			//				stroke = Pens.Blue; //(0, 0, 255);
 			//			}
-			//			line(x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
+			//			canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
 			//		}
 			//	}
 			//	lc++;
@@ -133,23 +141,23 @@ namespace SnakeAI.WinForms
 			//	{
 			//		if (weights[weights.Length - 1].matrix[i][j] < 0)
 			//		{
-			//			stroke(255, 0, 0);
+			//			stroke = Pens.Blue; //(255, 0, 0);
 			//		}
 			//		else
 			//		{
-			//			stroke(0, 0, 255);
+			//			stroke = Pens.Blue; //(0, 0, 255);
 			//		}
-			//		line(x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));
+			//		canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));
 			//	}
 			//}
 			//
 			//fill(0);
 			//textSize(15);
 			//textAlign(CENTER, CENTER);
-			//Text = string.Format("U", x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (nSize / 2));
-			//Text = string.Format("D", x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + space + nSize + (nSize / 2));
-			//Text = string.Format("L", x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (2 * space) + (2 * nSize) + (nSize / 2));
-			//Text = string.Format("R", x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (3 * space) + (3 * nSize) + (nSize / 2));
+			//Text = string.Format("U"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (nSize / 2));
+			//Text = string.Format("D"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + space + nSize + (nSize / 2));
+			//Text = string.Format("L"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (2 * space) + (2 * nSize) + (nSize / 2));
+			//Text = string.Format("R"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (3 * space) + (3 * nSize) + (nSize / 2));
 			#endregion
 
 			#region Plot Line-Graph Chart

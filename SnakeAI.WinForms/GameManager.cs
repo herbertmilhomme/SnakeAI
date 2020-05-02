@@ -9,57 +9,37 @@ namespace SnakeAI.WinForms
 {
 	internal class GameManager : Core
 	{
-		private int m_Width;
-		private int m_Height;
-		private int m_Speed;
-		private int m_Score;
-		private int m_Points;
-		private bool m_GameOver;
-
 		public int Width
 		{
-			get { return m_Width; }
-			set { m_Width = value; }
+			get { return Core.SIZE; }
+			//set { Core.SIZE = value; }
 		}
 		public int Height
 		{
-			get { return m_Height; }
-			set { m_Height = value; }
+			get { return Core.SIZE; }
+			//set { Core.SIZE = value; }
 		}
-		public int Speed
-		{
-			get { return m_Speed; }
-			set { m_Speed = value; }
-		}
-		public int Score
-		{
-			get { return this.highscore; }
-			set { this.highscore = value; }
-		}
-		public int Points
-		{
-			get { return m_Points; }
-			set { m_Points = value; }
-		}
-		public bool GameOver
-		{
-			get { return m_GameOver; }
-			set { m_GameOver = value; }
-		}
-		}
+		public int Speed { get; set; }
+		//public int Score
+		//{
+		//	get { return this.snake == null ? 0 : this.snake.body.Count; }//.score; }
+		//	//set { this.snake.score = value; }
+		//}
+		//public int Points { get; set; }
+		public bool GameOver { get; set; }
 		//public eDirection Direction { get; set; }
 
-		private Snake snake { get; set; }
-		private Snake model { get; set; }
+		//public override ISnake snake { get; private set; }
+		//public override ISnake model { get; private set; }
 
 		public GameManager() : base()
 		{
-			m_Width = 20;
-			m_Height = 20;
-			m_Speed = 8;
-			m_Score = 0;
-			m_Points = 100;
-			m_GameOver = false;
+			//Width = 20;
+			//Height = 20;
+			Speed = 8;
+			//m_Score = 0;
+			//Points = 100;
+			GameOver = false;
 			//Direction = eDirection.Down;
 		}
 
@@ -69,7 +49,7 @@ namespace SnakeAI.WinForms
 			Core.height = h;
 		}
 
-		public virtual void setup()
+		public override void setup()
 		{
 			//font = createFont("agencyfb-bold.ttf", 32);
 			evolution = new List<int>();

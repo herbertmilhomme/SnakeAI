@@ -42,6 +42,7 @@
     <Compile Include="Button.cs" />
     <Compile Include="EvolutionGraph.cs" />
     <Compile Include="Food.cs" />
+    <Compile Include="ISnake.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="NeuralNet.cs" />
     <Compile Include="Population.cs" />

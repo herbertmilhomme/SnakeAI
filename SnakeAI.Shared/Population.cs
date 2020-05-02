@@ -20,7 +20,7 @@ namespace SnakeAI.Shared
 			{
 				snakes[i] = new Snake();
 			}
-			bestSnake = snakes[0].Clone();
+			bestSnake = (Snake)snakes[0].Clone();
 			bestSnake.replay = true;
 		}
 
@@ -103,14 +103,14 @@ namespace SnakeAI.Shared
 			if (max > bestFitness)
 			{
 				bestFitness = max;
-				bestSnake = snakes[maxIndex].cloneForReplay();
+				bestSnake = (Snake)snakes[maxIndex].cloneForReplay();
 				bestSnakeScore = snakes[maxIndex].score;
 				//samebest = 0;
 				//mutationRate = defaultMutation;
 			}
 			else
 			{
-				bestSnake = bestSnake.cloneForReplay();
+				bestSnake = (Snake)bestSnake.cloneForReplay();
 				/*samebest++;
 				//if the best snake has remained the same for more than 3 generations, raise the mutation rate
 				if(samebest > 2) {  
@@ -148,10 +148,10 @@ namespace SnakeAI.Shared
 			calculateFitnessSum();
 
 			//add the best snake of the prior generation into the new generation
-			newSnakes[0] = bestSnake.Clone();  
+			newSnakes[0] = (Snake)bestSnake.Clone();  
 			for (int i = 1; i < snakes.Length; i++)
 			{
-				Snake child = selectParent().crossover(selectParent());
+				Snake child = (Snake)selectParent().crossover(selectParent());
 				child.mutate();
 				newSnakes[i] = child;
 			}

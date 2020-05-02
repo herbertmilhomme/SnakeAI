@@ -7,6 +7,8 @@ using SnakeAI.Shared;
 
 namespace SnakeAI.WinForms
 {
+	public class Snake : //SnakeAI.Shared.Snake, 
+		ISnake, IMovable
 	{
 		public int score = 1;
 		/// <summary>

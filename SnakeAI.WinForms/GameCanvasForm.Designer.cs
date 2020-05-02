@@ -86,7 +86,7 @@ namespace SnakeAI.WinForms
 			this.ScoreLabel.Name = "ScoreLabel";
 			this.ScoreLabel.Size = new System.Drawing.Size(78, 24);
 			this.ScoreLabel.TabIndex = 0;
-			this.ScoreLabel.Text = "SCORE: {0}";
+			this.ScoreLabel.Text = "SCORE: 0";
 			// 
 			// graph
 			// 

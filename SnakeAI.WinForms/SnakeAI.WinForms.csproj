@@ -97,6 +97,7 @@
     <Content Include="Resources\800px_COLOURBOX1486825.jpg" />
     <Content Include="Resources\leather-animal-snake-textures-reptile-crocodile-vector-2727690.jpg" />
     <Content Include="Resources\SnakeSnake.png" />
+    <None Include="Resources\agencyfb-bold.ttf" />
     <None Include="Resources\GO.png" />
     <None Include="Resources\empty.png" />
     <None Include="Resources\DSF.png" />

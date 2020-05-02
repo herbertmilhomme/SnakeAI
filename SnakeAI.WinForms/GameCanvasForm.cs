@@ -15,12 +15,13 @@ namespace SnakeAI.WinForms
 	public partial class GameCanvasForm : Form
 	{
 		private Snake m_Snake;
-		private Piece m_Fruit;
+		private Shared.Vector m_Fruit;
 		private GameManager m_GameManager;
+		private System.Drawing.Text.PrivateFontCollection pfc;
 
 		public GameCanvasForm()
 		{
-			InitCustomLabelFont();
+			//InitCustomLabelFont();
 			InitializeComponent();
 			GenLabel.Parent = Background;
 			RedLabel.Parent = Background;
@@ -28,9 +29,10 @@ namespace SnakeAI.WinForms
 			ScoreLabel.Parent = Background;
 			HighscoreLabel.Parent = Background;
 			MutationLabel.Parent = Background;
+			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
+			m_GameManager.setup();
 			m_Snake = new Snake();
-			m_Fruit = new Piece();
-			m_GameManager = new GameManager(w: Canvas.Size.Width, h: Canvas.Size.Height);
+			m_Fruit = new Shared.Vector();
 
 			GameTimer.Interval = 1000 / m_GameManager.Speed;
 			GameTimer.Tick += UpdateScreen;
@@ -38,6 +40,27 @@ namespace SnakeAI.WinForms
 
 			this.KeyPreview = true;
 			StartGame();
+		}
+
+		private void InitCustomLabelFont()
+		{
+			//Create your private font collection object.
+			pfc = new System.Drawing.Text.PrivateFontCollection();
+
+			//Select your font from the resources.
+			int fontLength = Properties.Resources.agencyfb_bold.Length;
+
+			// create a buffer to read in to
+			byte[] fontdata = Properties.Resources.agencyfb_bold;
+
+			// create an unsafe memory block for the font data
+			System.IntPtr data = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontLength);
+
+			// copy the bytes to the unsafe memory block
+			System.Runtime.InteropServices.Marshal.Copy(fontdata, 0, data, fontLength);
+
+			// pass the font to the font collection
+			pfc.AddMemoryFont(data, fontLength);
 		}
 
 		private void StartGame()
@@ -79,13 +102,14 @@ namespace SnakeAI.WinForms
 
 		private void ResetSettings()
 		{
-			m_GameManager = new GameManager(w: Canvas.Size.Width, h: Canvas.Size.Height);
-			m_Snake.Body.Clear();
+			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
+			m_Snake.body.Clear();
 			//GameOverPic.Hide();
 			//GameOverLabel.Hide();
-			Piece head = new Piece { X = 10, Y = 5 };//(int)(Canvas.Size.Height/2)
+			Shared.Vector head = new Shared.Vector { x = (int)((Canvas.Size.Width / m_GameManager.Width )/ 2), y = 5 };//
 			m_Snake.Add(head);
-			ScoreLabel.Text = m_GameManager.Score.ToString();
+			//ScoreLabel.Text = m_GameManager.Score.ToString();
+			ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
 		}
 
 		private void Canvas_Paint(object sender, PaintEventArgs e)
@@ -106,14 +130,14 @@ namespace SnakeAI.WinForms
 						snakeColour = Brushes.Yellow;    //Rest of body
 
 					canvas.FillRectangle(snakeColour,
-						new Rectangle(m_Snake.Body[i].X * m_GameManager.Width,
-									  m_Snake.Body[i].Y * m_GameManager.Height,
+						new Rectangle((int)m_Snake.body[i].x * m_GameManager.Width,
+									  (int)m_Snake.body[i].y * m_GameManager.Height,
 									  m_GameManager.Width, m_GameManager.Height));
 
 
 					canvas.FillRectangle(Brushes.Red,
-						new Rectangle(m_Fruit.X * m_GameManager.Width,
-							 m_Fruit.Y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
+						new Rectangle((int)m_Fruit.x * m_GameManager.Width,
+							 (int)m_Fruit.y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
 				}
 				for (int x = 1; x < Canvas.Size.Width / m_GameManager.Width; x++)
 				{
@@ -145,9 +169,9 @@ namespace SnakeAI.WinForms
 			int maxXPosition = Canvas.Size.Width / m_GameManager.Width;
 			int maxYPositon = Canvas.Size.Height / m_GameManager.Height;
 
-			Random random = new Random();
+			//Random random = new Random();
 
-			m_Fruit = new Piece { X = random.Next(0, maxXPosition), Y = random.Next(0, maxYPositon) };
+			m_Fruit = new Shared.Vector { x = Shared.Core.Rand.Next(0, maxXPosition), y = Shared.Core.Rand.Next(0, maxYPositon) };
 		}
 
 		private void DoMove()
@@ -176,22 +200,22 @@ namespace SnakeAI.WinForms
 					int maxXPos = Canvas.Size.Width / m_GameManager.Width;
 					int maxYPos = Canvas.Size.Height / m_GameManager.Height;
 
-					if (m_Snake.Body[i].X < 0 || m_Snake.Body[i].Y < 0
-						|| m_Snake.Body[i].X >= maxXPos || m_Snake.Body[i].Y >= maxYPos)
+					if (m_Snake.body[i].x < 0 || m_Snake.body[i].y < 0
+						|| m_Snake.body[i].x >= maxXPos || m_Snake.body[i].y >= maxYPos)
 					{
 						Die();
 					}
 
 					for (int j = 1; j < m_Snake.Length; j++)
 					{
-						if (m_Snake.Body[i].X == m_Snake.Body[j].X &&
-						   m_Snake.Body[i].Y == m_Snake.Body[j].Y)
+						if (m_Snake.body[i].x == m_Snake.body[j].x &&
+						   m_Snake.body[i].y == m_Snake.body[j].y)
 						{
 							Die();
 						}
 					}
 
-					if (m_Snake.Body[0].X == m_Fruit.X && m_Snake.Body[0].Y == m_Fruit.Y)
+					if (m_Snake.body[0].x == m_Fruit.x && m_Snake.body[0].y == m_Fruit.y)
 					{
 						Eat();
 					}
@@ -200,23 +224,25 @@ namespace SnakeAI.WinForms
 				else
 				{
 					//Move body
-					m_Snake.Body[i].X = m_Snake.Body[i - 1].X;
-					m_Snake.Body[i].Y = m_Snake.Body[i - 1].Y;
+					//m_Snake.body[i].x = m_Snake.body[i - 1].x;
+					//m_Snake.body[i].y = m_Snake.body[i - 1].y;
+					m_Snake.body[i] = new Shared.Vector( m_Snake.body[i - 1].x, m_Snake.body[i - 1].y);
 				}
 			}
 		}
 
 		private void Eat()
 		{
-			Piece piece = new Piece
+			Shared.Vector piece = new Shared.Vector
 			{
-				X = m_Snake.Body[m_Snake.Length - 1].X,
-				Y = m_Snake.Body[m_Snake.Length - 1].Y
+				x = m_Snake.body[m_Snake.Length - 1].x,
+				y = m_Snake.body[m_Snake.Length - 1].y
 			};
 			m_Snake.Add(piece);
 
-			m_GameManager.Score += m_GameManager.Points;
-			ScoreLabel.Text = m_GameManager.Score.ToString();
+			//m_GameManager.Score += m_GameManager.Points;
+			//ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.Score.ToString());
+			ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
 
 			GenerateFruit();
 		}

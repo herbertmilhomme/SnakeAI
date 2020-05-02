@@ -3,23 +3,22 @@ using System.Collections.Generic;
 
 namespace SnakeAI.Shared
 {
-	public class Snake
+	public class Snake : ISnake //ToDo: abstract class
 	{
-
 		public int score = 1;
 		/// <summary>
 		/// amount of moves the snake can make before it dies
 		/// </summary>
-		public int lifeLeft = 200;  
+		public int lifeLeft = 200;
 		/// <summary>
 		/// amount of time the snake has been alive
 		/// </summary>
-		public int lifetime = 0;  
+		public int lifetime = 0;
 		public int xVel, yVel;
 		/// <summary>
 		/// itterator to run through the foodlist (used for replay)
 		/// </summary>
-		public int foodItterate = 0;  
+		public int foodItterate = 0;
 
 		public float fitness = 0;
 
@@ -27,38 +26,39 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// if this snake is a replay of best snake
 		/// </summary>
-		public bool replay = false;  
+		public bool replay = false;
 
 		/// <summary>
 		/// snakes vision
 		/// </summary>
-		public float[] vision;  
+		public float[] vision { get; set; }
 		/// <summary>
 		/// snakes decision
 		/// </summary>
-		public float[] decision;  
+		public float[] decision { get; set; }
 
-		public Vector head;
+		public Vector head { get; set; }
 
 		/// <summary>
 		/// snakes body
 		/// </summary>
-		public List<Vector> body;  
+		public List<Vector> body { get; set; }
 		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		public List<Food> foodList;  
-
-		public Food food;
-		public NeuralNet brain;
+		public List<Food> foodList { get; set; }
+		public Food food { get; set; }
+		public NeuralNet brain { get; set; }
 
 		public Snake() : this(Core.hidden_layers) { }
 
-		public Snake(int layers) {
+		public Snake(int layers)
+		{
 			head = new Vector(800, Core.height / 2);
 			food = new Food();
 			body = new List<Vector>();
-			if (!Core.humanPlaying) {
+			if (!Core.humanPlaying)
+			{
 				vision = new float[24];
 				decision = new float[4];
 				foodList = new List<Food>();
@@ -74,14 +74,16 @@ namespace SnakeAI.Shared
 		/// this constructor passes in a list of food positions so that a replay can replay the best snake
 		/// </summary>
 		/// <param name="foods"></param>
-		public Snake(List<Food> foods) {  
+		public Snake(List<Food> foods)
+		{
 			replay = true;
 			vision = new float[24];
 			decision = new float[4];
 			body = new List<Vector>();
 			foodList = new List<Food>(foods.Count);
 			//clone all the food positions in the foodlist
-			foreach (Food f in foods) {  
+			foreach (Food f in foods)
+			{
 				foodList.Add(f.Clone());
 			}
 			food = foodList[foodItterate];
@@ -98,9 +100,12 @@ namespace SnakeAI.Shared
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		public bool bodyCollide(float x, float y) {  
-			for (int i = 0; i < body.Count; i++) {
-				if (x == body[i].x && y == body[i].y) {
+		public bool bodyCollide(float x, float y)
+		{
+			for (int i = 0; i < body.Count; i++)
+			{
+				if (x == body[i].x && y == body[i].y)
+				{
 					return true;
 				}
 			}
@@ -113,8 +118,10 @@ namespace SnakeAI.Shared
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		public bool foodCollide(float x, float y) {  
-			if (x == food.pos.x && y == food.pos.y) {
+		public bool foodCollide(float x, float y)
+		{
+			if (x == food.pos.x && y == food.pos.y)
+			{
 				return true;
 			}
 			return false;
@@ -126,8 +133,10 @@ namespace SnakeAI.Shared
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		public bool wallCollide(float x, float y) {  
-			if (x >= Core.width - (Core.SIZE) || x < 400 + Core.SIZE || y >= Core.height - (Core.SIZE) || y < Core.SIZE) {
+		public bool wallCollide(float x, float y)
+		{
+			if (x >= Core.width - (Core.SIZE) || x < 400 + Core.SIZE || y >= Core.height - (Core.SIZE) || y < Core.SIZE)
+			{
 				return true;
 			}
 			return false;
@@ -137,7 +146,7 @@ namespace SnakeAI.Shared
 		/// show the snake
 		/// </summary>
 		public virtual void show()
-		{  
+		{
 			//food.show();
 			//fill(255);
 			//stroke(0);
@@ -155,21 +164,30 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// move the snake
 		/// </summary>
-		public void move() {  
-			if (!dead) {
-				if (!Core.humanPlaying && !Core.modelLoaded) {
+		public void move()
+		{
+			if (!dead)
+			{
+				if (!Core.humanPlaying && !Core.modelLoaded)
+				{
 					lifetime++;
 					lifeLeft--;
 				}
-				if (foodCollide(head.x, head.y)) {
+				if (foodCollide(head.x, head.y))
+				{
 					eat();
 				}
 				shiftBody();
-				if (wallCollide(head.x, head.y)) {
+				if (wallCollide(head.x, head.y))
+				{
 					dead = true;
-				} else if (bodyCollide(head.x, head.y)) {
+				}
+				else if (bodyCollide(head.x, head.y))
+				{
 					dead = true;
-				} else if (lifeLeft <= 0 && !Core.humanPlaying) {
+				}
+				else if (lifeLeft <= 0 && !Core.humanPlaying)
+				{
 					dead = true;
 				}
 			}
@@ -178,35 +196,48 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// eat food
 		/// </summary>
-		public void eat() {  
+		public void eat()
+		{
 			int len = body.Count - 1;
 			score++;
-			if (!Core.humanPlaying && !Core.modelLoaded) {
-				if (lifeLeft < 500) {
-					if (lifeLeft > 400) {
+			if (!Core.humanPlaying && !Core.modelLoaded)
+			{
+				if (lifeLeft < 500)
+				{
+					if (lifeLeft > 400)
+					{
 						lifeLeft = 500;
-					} else {
+					}
+					else
+					{
 						lifeLeft += 100;
 					}
 				}
 			}
-			if (len >= 0) {
+			if (len >= 0)
+			{
 				body.Add(new Vector(body[len].x, body[len].y));
-			} else {
+			}
+			else
+			{
 				body.Add(new Vector(head.x, head.y));
 			}
-			if (!replay) {
+			if (!replay)
+			{
 				food = new Food();
-				while (bodyCollide(food.pos.x, food.pos.y)) {
+				while (bodyCollide(food.pos.x, food.pos.y))
+				{
 					food = new Food();
 				}
-				if (!Core.humanPlaying) {
+				if (!Core.humanPlaying)
+				{
 					foodList.Add(food);
 				}
 			}
 			//if the snake is a replay, then we dont want to create new random foods, 
 			//want to see the positions the best snake had to collect
-			else {  
+			else
+			{
 				food = foodList[foodItterate];
 				foodItterate++;
 			}
@@ -216,12 +247,13 @@ namespace SnakeAI.Shared
 		/// shift the body to follow the head
 		/// </summary>
 		public void shiftBody()
-		{  
+		{
 			//float tempx = head.x;
 			//float tempy = head.y;
 			Vector tempv = new Vector(head.x, head.y);
-			head.x += xVel;
-			head.y += yVel;
+			//head.x += xVel;
+			//head.y += yVel;
+			head = new Vector(head.x + xVel, head.y + xVel);
 			//float temp2x;
 			//float temp2y;
 			Vector temp2v;
@@ -243,7 +275,8 @@ namespace SnakeAI.Shared
 		/// clone a version of the snake that will be used for a replay
 		/// </summary>
 		/// <returns></returns>
-		public Snake cloneForReplay() {  
+		public ISnake cloneForReplay()
+		{
 			Snake clone = new Snake(foodList);
 			clone.brain = brain.Clone();
 			return clone;
@@ -253,7 +286,8 @@ namespace SnakeAI.Shared
 		/// clone the snake
 		/// </summary>
 		/// <returns></returns>
-		public Snake Clone() {  
+		public ISnake Clone()
+		{
 			Snake clone = new Snake(Core.hidden_layers);
 			clone.brain = brain.Clone();
 			return clone;
@@ -264,7 +298,8 @@ namespace SnakeAI.Shared
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public Snake crossover(Snake parent) {  
+		public ISnake crossover(ISnake parent)
+		{
 			Snake child = new Snake(Core.hidden_layers);
 			child.brain = brain.crossover(parent.brain);
 			return child;
@@ -273,17 +308,22 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// mutate the snakes brain
 		/// </summary>
-		public void mutate() {  
+		public void mutate()
+		{
 			brain.mutate(Core.mutationRate);
 		}
 
 		/// <summary>
 		/// calculate the fitness of the snake
 		/// </summary>
-		public void calculateFitness() {  
-			if (score < 10) {
+		public void calculateFitness()
+		{
+			if (score < 10)
+			{
 				fitness = float.Parse((Math.Floor((double)lifetime * lifetime) * Math.Pow(2, score)).ToString());
-			} else {
+			}
+			else
+			{
 				fitness = float.Parse(Math.Floor((double)lifetime * lifetime).ToString());
 				fitness *= float.Parse(Math.Pow(2, 10).ToString());
 				fitness *= (score - 9);
@@ -293,7 +333,8 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// look in all 8 directions and check for food, body and wall
 		/// </summary>
-		public void look() {  
+		public void look()
+		{
 			vision = new float[24];
 			float[] temp = lookInDirection(new Vector(-Core.SIZE, 0));
 			vision[0] = temp[0];
@@ -335,7 +376,7 @@ namespace SnakeAI.Shared
 		/// <param name="direction"></param>
 		/// <returns></returns>
 		public virtual float[] lookInDirection(Vector direction)
-		{  
+		{
 			float[] look = new float[3];
 			Vector pos = new Vector(head.x, head.y);
 			float distance = 0;
@@ -343,13 +384,15 @@ namespace SnakeAI.Shared
 			bool bodyFound = false;
 			pos.Add(direction);
 			distance += 1;
-			while (!wallCollide(pos.x, pos.y)) 
+			while (!wallCollide(pos.x, pos.y))
 			{
-				if (!foodFound && foodCollide(pos.x, pos.y)) {
+				if (!foodFound && foodCollide(pos.x, pos.y))
+				{
 					foodFound = true;
 					look[0] = 1;
 				}
-				if (!bodyFound && bodyCollide(pos.x, pos.y)) {
+				if (!bodyFound && bodyCollide(pos.x, pos.y))
+				{
 					bodyFound = true;
 					look[1] = 1;
 				}
@@ -385,18 +428,22 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// think about what direction to move
 		/// </summary>
-		public void think() {  
+		public void think()
+		{
 			decision = brain.output(vision);
 			int maxIndex = 0;
 			float max = 0;
-			for (int i = 0; i < decision.Length; i++) {
-				if (decision[i] > max) {
+			for (int i = 0; i < decision.Length; i++)
+			{
+				if (decision[i] > max)
+				{
 					max = decision[i];
 					maxIndex = i;
 				}
 			}
 
-			switch (maxIndex) {
+			switch (maxIndex)
+			{
 				case 0:
 					moveUp();
 					break;
@@ -412,23 +459,31 @@ namespace SnakeAI.Shared
 			}
 		}
 
-		public void moveUp() {
-			if (yVel != Core.SIZE) {
+		public void moveUp()
+		{
+			if (yVel != Core.SIZE)
+			{
 				xVel = 0; yVel = -Core.SIZE;
 			}
 		}
-		public void moveDown() {
-			if (yVel != -Core.SIZE) {
+		public void moveDown()
+		{
+			if (yVel != -Core.SIZE)
+			{
 				xVel = 0; yVel = Core.SIZE;
 			}
 		}
-		public void moveLeft() {
-			if (xVel != Core.SIZE) {
+		public void moveLeft()
+		{
+			if (xVel != Core.SIZE)
+			{
 				xVel = -Core.SIZE; yVel = 0;
 			}
 		}
-		public void moveRight() {
-			if (xVel != -Core.SIZE) {
+		public void moveRight()
+		{
+			if (xVel != -Core.SIZE)
+			{
 				xVel = Core.SIZE; yVel = 0;
 			}
 		}

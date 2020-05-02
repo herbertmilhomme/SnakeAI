@@ -5,10 +5,10 @@ using System.IO;
 
 namespace SnakeAI.Shared
 {
-	public class Core
+	public abstract class Core
 	{
-		public static readonly int height;
-		public static readonly int width;
+		public static int height;
+		public static int width;
 		public const int SIZE = 20;
 		public const int hidden_nodes = 16;
 		public const int hidden_layers = 2;
@@ -48,8 +48,8 @@ namespace SnakeAI.Shared
 
 		EvolutionGraph graph;
 
-		protected Snake snake;
-		protected Snake model;
+		public virtual ISnake snake { get; protected set; }
+		public virtual ISnake model { get; protected set; }
 
 		protected Population pop;
 
@@ -271,7 +271,7 @@ namespace SnakeAI.Shared
 			{
 				//string path = selection.getAbsolutePath();
 				DataTable modelTable = new DataTable();
-				Snake modelToSave = pop.bestSnake.Clone();
+				Snake modelToSave = (Snake)pop.bestSnake.Clone();
 				Matrix[] modelWeights = modelToSave.brain.pull();
 				float[][] weights = new float[modelWeights.Length][];
 				for (int i = 0; i < weights.Length; i++)
