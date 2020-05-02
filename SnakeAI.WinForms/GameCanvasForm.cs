@@ -36,6 +36,7 @@ namespace SnakeAI.WinForms
 			GameTimer.Tick += UpdateScreen;
 			GameTimer.Start();
 
+			this.KeyPreview = true;
 			StartGame();
 		}
 
@@ -50,21 +51,25 @@ namespace SnakeAI.WinForms
 		{
 			if (m_GameManager.GameOver)
 			{
-				//if (UserInputController.KeyPressed(Keys.Enter))
+				//if (UserInputController.KeyPressed(Keys.Enter) || UserInputController.KeyPressed(Keys.Space))
 				//{
 					StartGame();
 				//}
 			}
 			else
 			{
-				if (UserInputController.KeyPressed(Keys.Right) && m_GameManager.Direction != eDirection.Left)
-					m_GameManager.Direction = eDirection.Right;
-				else if (UserInputController.KeyPressed(Keys.Left) && m_GameManager.Direction != eDirection.Right)
-					m_GameManager.Direction = eDirection.Left;
-				else if (UserInputController.KeyPressed(Keys.Up) && m_GameManager.Direction != eDirection.Down)
-					m_GameManager.Direction = eDirection.Up;
-				else if (UserInputController.KeyPressed(Keys.Down) && m_GameManager.Direction != eDirection.Up)
-					m_GameManager.Direction = eDirection.Down;
+				if (UserInputController.KeyPressed(Keys.Right))// && m_GameManager.Direction != eDirection.Left)
+					//m_GameManager.Direction = eDirection.Right;
+					m_Snake.moveRight();
+				else if (UserInputController.KeyPressed(Keys.Left))// && m_GameManager.Direction != eDirection.Right)
+					//m_GameManager.Direction = eDirection.Left;
+					m_Snake.moveLeft();
+				else if (UserInputController.KeyPressed(Keys.Up))// && m_GameManager.Direction != eDirection.Down)
+					//m_GameManager.Direction = eDirection.Up;
+					m_Snake.moveUp();
+				else if (UserInputController.KeyPressed(Keys.Down))// && m_GameManager.Direction != eDirection.Up)
+					//m_GameManager.Direction = eDirection.Down;
+					m_Snake.moveDown();
 
 				DoMove();
 			}
@@ -152,7 +157,7 @@ namespace SnakeAI.WinForms
 				//Move head
 				if (i == 0)
 				{
-					switch (m_GameManager.Direction)
+					switch (m_Snake.direction)//m_GameManager.Direction
 					{
 						case eDirection.Right:
 							m_Snake.MoveRight(i);
@@ -219,6 +224,19 @@ namespace SnakeAI.WinForms
 		private void Die()
 		{
 			m_GameManager.GameOver = true;
+		}
+
+		private void GameCanvasForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			if (e.KeyCode == System.Windows.Forms.Keys.Up || 
+				e.KeyCode == System.Windows.Forms.Keys.Down || 
+				e.KeyCode == System.Windows.Forms.Keys.Left || 
+				e.KeyCode == System.Windows.Forms.Keys.Right)
+			{
+				// Do not put any logic here, instead use the 
+				// KeyDown event after setting IsInputKey to true
+				e.IsInputKey = true;
+			}
 		}
 
 		private void GameCanvasForm_KeyDown(object sender, KeyEventArgs e)

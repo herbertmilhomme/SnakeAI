@@ -15,7 +15,6 @@ namespace SnakeAI.WinForms
 		private int m_Score;
 		private int m_Points;
 		private bool m_GameOver;
-		private eDirection m_Direction;
 
 		public int Width
 		{
@@ -47,11 +46,8 @@ namespace SnakeAI.WinForms
 			get { return m_GameOver; }
 			set { m_GameOver = value; }
 		}
-		public eDirection Direction
-		{
-			get { return m_Direction; }
-			set { m_Direction = value; }
 		}
+		//public eDirection Direction { get; set; }
 
 		private Snake snake { get; set; }
 		private Snake model { get; set; }
@@ -64,7 +60,7 @@ namespace SnakeAI.WinForms
 			m_Score = 0;
 			m_Points = 100;
 			m_GameOver = false;
-			m_Direction = eDirection.Down;
+			//Direction = eDirection.Down;
 		}
 
 		public GameManager(int w, int h) : this()
@@ -97,8 +93,8 @@ namespace SnakeAI.WinForms
 
 	public enum eDirection
 	{
-		Up,
 		Down,
+		Up,
 		Left,
 		Right
 	};

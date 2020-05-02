@@ -102,6 +102,7 @@ namespace SnakeAI.WinForms
 			this.graph.TabStop = false;
 			this.graph.Text = "Graph";
 			this.graph.UseVisualStyleBackColor = true;
+			this.graph.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
 			// 
 			// load
 			// 
@@ -117,6 +118,7 @@ namespace SnakeAI.WinForms
 			this.load.TabStop = false;
 			this.load.Text = "Load";
 			this.load.UseVisualStyleBackColor = false;
+			this.load.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
 			// 
 			// save
 			// 
@@ -132,6 +134,7 @@ namespace SnakeAI.WinForms
 			this.save.Text = "Save";
 			this.save.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.save.UseVisualStyleBackColor = true;
+			this.save.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
 			// 
 			// IncreaseBut
 			// 
@@ -146,6 +149,7 @@ namespace SnakeAI.WinForms
 			this.IncreaseBut.TabStop = false;
 			this.IncreaseBut.Text = "+";
 			this.IncreaseBut.UseVisualStyleBackColor = true;
+			this.IncreaseBut.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
 			// 
 			// DecreaseBut
 			// 
@@ -160,6 +164,7 @@ namespace SnakeAI.WinForms
 			this.DecreaseBut.TabStop = false;
 			this.DecreaseBut.Text = "-";
 			this.DecreaseBut.UseVisualStyleBackColor = true;
+			this.DecreaseBut.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
 			// 
 			// HighscoreLabel
 			// 
@@ -253,6 +258,7 @@ namespace SnakeAI.WinForms
 			//this.Padding = new System.Windows.Forms.Padding(1, 1, 41, 41);
 			this.Name = "GameCanvasForm";
 			this.Text = "SnakeAI.WinForms";
+			//this.KeyPreview = true;
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameCanvasForm_KeyDown);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameCanvasForm_KeyUp);
 			((System.ComponentModel.ISupportInitialize)(this.Canvas)).EndInit();
