@@ -49,6 +49,10 @@ namespace SnakeAI.Shared
 		public virtual List<Food> foodList { get; set; }
 		public virtual Food food { get; set; }
 		public virtual NeuralNet brain { get; set; }
+		public int Length
+		{
+			get { return body.Count; }
+		}
 
 		public Snake() : this(Core.hidden_layers)
 		{

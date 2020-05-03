@@ -45,5 +45,6 @@ namespace SnakeAI.Shared
 		List<Food> foodList { get; set; }
 		Food food { get; set; }
 		NeuralNet brain { get; set; }
+		int Length { get; }
 	}
 }

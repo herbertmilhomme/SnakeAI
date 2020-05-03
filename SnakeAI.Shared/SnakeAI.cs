@@ -17,10 +17,10 @@ namespace SnakeAI.Shared
 		/// </summary>
 		public const int fps = 100;
 
-		protected int highscore = 0;
+		public static int highscore { get; set; }
 
 		public static float mutationRate = 0.05f;
-		float defaultmutation = mutationRate;
+		public static float defaultmutation = mutationRate;
 
 		/// <summary>
 		/// false for AI, true to play yourself
@@ -46,12 +46,12 @@ namespace SnakeAI.Shared
 		//Button increaseMut;
 		//Button decreaseMut;
 
-		public virtual EvolutionGraph graph { get; protected set; }
+		public static EvolutionGraph graph { get; set; }
 
-		public virtual ISnake snake { get; protected set; }
-		public virtual ISnake model { get; protected set; }
+		public static ISnake snake { get; set; }
+		public static ISnake model { get; set; }
 
-		public virtual Population pop { get; protected set; }
+		public static Population pop { get; protected set; }
 
 		#region Custom Rand Function
 		/// <summary>
@@ -261,65 +261,65 @@ namespace SnakeAI.Shared
 
 		public void fileSelectedOut(string path)
 		{
-			FileStream selection = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-			if (selection == null)
-			{
-				//println("Window was closed or the user hit cancel.");
-				Console.WriteLine("Window was closed or the user hit cancel.");
-			}
-			else
-			{
-				//string path = selection.getAbsolutePath();
-				DataTable modelTable = new DataTable();
-				Snake modelToSave = (Snake)pop.bestSnake.Clone();
-				Matrix[] modelWeights = modelToSave.brain.pull();
-				float[][] weights = new float[modelWeights.Length][];
-				for (int i = 0; i < weights.Length; i++)
+			using (FileStream selection = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+				if (selection == null)
 				{
-					weights[i] = modelWeights[i].ToArray();
+					//println("Window was closed or the user hit cancel.");
+					Console.WriteLine("Window was closed or the user hit cancel.");
 				}
-				for (int i = 0; i < weights.Length; i++)
+				else
 				{
-					modelTable.Columns.Add("L" + i, typeof(float)); 
-				}
-				modelTable.Columns.Add("Graph", typeof(int)); 
-				int maxLen = weights[0].Length;
-				for (int i = 1; i < weights.Length; i++)
-				{
-					if (weights[i].Length > maxLen)
+					//string path = selection.getAbsolutePath();
+					DataTable modelTable = new DataTable();
+					Snake modelToSave = (Snake)pop.bestSnake.Clone();
+					Matrix[] modelWeights = modelToSave.brain.pull();
+					float[][] weights = new float[modelWeights.Length][];
+					for (int i = 0; i < weights.Length; i++)
 					{
-						maxLen = weights[i].Length;
+						weights[i] = modelWeights[i].ToArray();
 					}
-				}
-				int g = 0;
-				for (int i = 0; i < maxLen; i++)
-				{
-					DataRow newRow = modelTable.NewRow(); 
-					for (int j = 0; j < weights.Length + 1; j++)
+					for (int i = 0; i < weights.Length; i++)
 					{
-						if (j == weights.Length)
+						modelTable.Columns.Add("L" + i, typeof(float));
+					}
+					modelTable.Columns.Add("Graph", typeof(int));
+					int maxLen = weights[0].Length;
+					for (int i = 1; i < weights.Length; i++)
+					{
+						if (weights[i].Length > maxLen)
 						{
-							if (g < evolution.Count)
+							maxLen = weights[i].Length;
+						}
+					}
+					int g = 0;
+					for (int i = 0; i < maxLen; i++)
+					{
+						DataRow newRow = modelTable.NewRow();
+						for (int j = 0; j < weights.Length + 1; j++)
+						{
+							if (j == weights.Length)
 							{
-								//newRow.setInt("Graph", evolution[g]);
-								newRow["Graph"] = evolution[g];
-								g++;
+								if (g < evolution.Count)
+								{
+									//newRow.setInt("Graph", evolution[g]);
+									newRow["Graph"] = evolution[g];
+									g++;
+								}
+							}
+							else if (i < weights[j].Length)
+							{
+								//newRow.setFloat("L" + j, weights[j][i]);
+								newRow["L" + j] = weights[j][i];
 							}
 						}
-						else if (i < weights[j].Length)
-						{
-							//newRow.setFloat("L" + j, weights[j][i]);
-							newRow["L" + j] = weights[j][i];
-						}
 					}
+					modelTable.AcceptChanges();
+					//saveTable(modelTable, path);
+					modelTable.WriteXml(selection);
 				}
-				modelTable.AcceptChanges();
-				//saveTable(modelTable, path);
-				modelTable.WriteXml(selection);
-			}
 		}
 
-		public virtual void mousePressed()
+		/*public virtual void mousePressed()
 		{
 			//if (graphButton.collide(mouseX, mouseY))
 			//{
@@ -373,6 +373,6 @@ namespace SnakeAI.Shared
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

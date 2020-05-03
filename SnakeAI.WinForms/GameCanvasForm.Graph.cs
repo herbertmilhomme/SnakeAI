@@ -5,9 +5,6 @@ namespace SnakeAI.WinForms
 {
 	partial class GameCanvasForm
 	{
-		//float[] vision;
-		//float[] decision;
-		Shared.ISnake snake;
 		private void Graph_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics canvas = e.Graphics;
@@ -20,6 +17,7 @@ namespace SnakeAI.WinForms
 			float y = 0;
 			float w = 360;
 			float h = 790;
+			Snake snake = (Snake)GameManager.model;
 			float[] vision = snake.vision;
 			float[] decision = snake.decision;
 			float space = 5;
@@ -59,7 +57,7 @@ namespace SnakeAI.WinForms
 				//textSize(nSize / 2);
 				//textAlign(CENTER, CENTER);
 				//fill(0);
-				//Text = string.Format(i);//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
+				//Text = string.Format(i.ToString());//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
 			}
 			
 			lc++;

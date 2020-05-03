@@ -52,10 +52,6 @@ namespace SnakeAI.WinForms
 		public override Food food { get; set; }
 		public override NeuralNet brain { get; set; }*/
 		public eDirection direction { get; set; }
-		public int Length
-		{
-			get { return body.Count; }
-		}
 
 		public Snake() : this(Core.hidden_layers) { direction = eDirection.Down; }
 

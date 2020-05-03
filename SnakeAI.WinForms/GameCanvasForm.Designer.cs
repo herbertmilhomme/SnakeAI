@@ -221,7 +221,7 @@ namespace SnakeAI.WinForms
 			this.GenLabel.Name = "GenLabel";
 			this.GenLabel.Size = new System.Drawing.Size(66, 24);
 			this.GenLabel.TabIndex = 0;
-			this.GenLabel.Text = "GEN: {0}";
+			this.GenLabel.Text = "GEN: 0";
 			this.GenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// MutationLabel
@@ -235,7 +235,7 @@ namespace SnakeAI.WinForms
 			this.MutationLabel.Name = "MutationLabel";
 			this.MutationLabel.Size = new System.Drawing.Size(136, 24);
 			this.MutationLabel.TabIndex = 0;
-			this.MutationLabel.Text = "MUTATION RATE: {0}%";
+			this.MutationLabel.Text = "MUTATION RATE: 0%";
 			this.MutationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// GameCanvasForm

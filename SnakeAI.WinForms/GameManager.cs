@@ -20,11 +20,11 @@ namespace SnakeAI.WinForms
 			//set { Core.SIZE = value; }
 		}
 		public int Speed { get; set; }
-		//public int Score
-		//{
-		//	get { return this.snake == null ? 0 : this.snake.body.Count; }//.score; }
-		//	//set { this.snake.score = value; }
-		//}
+		public int Score
+		{
+			get { return snake == null ? 0 : snake.Length - 1; }//.score; }
+			//set { this.snake.score = value; }
+		}
 		//public int Points { get; set; }
 		public bool GameOver { get; set; }
 		//public eDirection Direction { get; set; }
