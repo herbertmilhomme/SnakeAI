@@ -73,7 +73,7 @@ namespace SnakeAI.WinForms
 			this.Background.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.Background.TabIndex = 0;
 			this.Background.TabStop = false;
-			this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+			//this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
 			// 
 			// ScoreLabel
 			// 
@@ -103,6 +103,7 @@ namespace SnakeAI.WinForms
 			this.graph.Text = "Graph";
 			this.graph.UseVisualStyleBackColor = true;
 			this.graph.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
+			this.graph.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameCanvasForm_GraphMousePress);
 			// 
 			// load
 			// 
@@ -119,6 +120,7 @@ namespace SnakeAI.WinForms
 			this.load.Text = "Load";
 			this.load.UseVisualStyleBackColor = false;
 			this.load.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
+			this.load.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameCanvasForm_LoadMousePress);
 			// 
 			// save
 			// 
@@ -135,6 +137,7 @@ namespace SnakeAI.WinForms
 			this.save.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.save.UseVisualStyleBackColor = true;
 			this.save.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
+			this.save.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameCanvasForm_SaveMousePress);
 			// 
 			// IncreaseBut
 			// 
@@ -150,6 +153,7 @@ namespace SnakeAI.WinForms
 			this.IncreaseBut.Text = "+";
 			this.IncreaseBut.UseVisualStyleBackColor = true;
 			this.IncreaseBut.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
+			this.IncreaseBut.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameCanvasForm_IncreaseMousePress);
 			// 
 			// DecreaseBut
 			// 
@@ -165,6 +169,7 @@ namespace SnakeAI.WinForms
 			this.DecreaseBut.Text = "-";
 			this.DecreaseBut.UseVisualStyleBackColor = true;
 			this.DecreaseBut.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.GameCanvasForm_PreviewKeyDown);
+			this.DecreaseBut.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameCanvasForm_DecreaseMousePress);
 			// 
 			// HighscoreLabel
 			// 
@@ -176,7 +181,7 @@ namespace SnakeAI.WinForms
 			this.HighscoreLabel.Name = "HighscoreLabel";
 			this.HighscoreLabel.Size = new System.Drawing.Size(115, 24);
 			this.HighscoreLabel.TabIndex = 0;
-			this.HighscoreLabel.Text = "HIGHSCORE: {0}";
+			this.HighscoreLabel.Text = "HIGHSCORE: 0";
 			this.HighscoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// RedLabel

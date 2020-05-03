@@ -4,7 +4,6 @@ namespace SnakeAI.Shared
 {
 	public class Matrix
 	{
-
 		public int rows, cols;
 		public float[][] matrix;
 

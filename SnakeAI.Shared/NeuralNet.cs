@@ -2,9 +2,8 @@ namespace SnakeAI.Shared
 {
 	public class NeuralNet
 	{
-
-		int iNodes, hNodes, oNodes, hLayers;
-		Matrix[] weights;
+		public int iNodes, hNodes, oNodes, hLayers;
+		public Matrix[] weights;
 
 		public NeuralNet(int input, int hidden, int output, int hiddenLayers)
 		{
@@ -90,7 +89,7 @@ namespace SnakeAI.Shared
 			return model;
 		}
 
-		public virtual void show(float x, float y, float w, float h, float[] vision, float[] decision)
+		[System.Obsolete] public virtual void show(float x, float y, float w, float h, float[] vision, float[] decision)
 		{
 			//float space = 5;
 			//float nSize = (h - (space * (iNodes - 2))) / iNodes;

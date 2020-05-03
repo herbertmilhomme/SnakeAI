@@ -69,6 +69,77 @@ namespace SnakeAI.WinForms
 				pop = new Population(2000);
 			}
 		}
+
+		public override void fileSelectedIn(string path)
+		{
+			using (System.IO.FileStream selection = System.IO.File.Open(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite))
+				if (selection == null)
+				{
+					//println("Window was closed or the user hit cancel.");
+					Console.WriteLine("Window was closed or the user hit cancel.");
+				}
+				else
+				{
+					//string path = selection.getAbsolutePath();
+					System.Data.DataTable modelTable = new System.Data.DataTable("header");
+					modelTable.ReadXml(selection); //loadTable(path, "header");
+					Matrix[] weights = new Matrix[modelTable.Columns.Count - 1];
+					float[][] in_ = new float[hidden_nodes][];
+					for (int i = 0; i < hidden_nodes; i++)
+					{
+						in_[i] = new float[25];
+						for (int j = 0; j < 25; j++)
+						{
+							//in_[i][j] = modelTable.getFloat(j + i * 25, "L0");
+							in_[i][j] = (float)modelTable.Rows[j + i * 25]["L0"];
+						}
+					}
+					weights[0] = new Matrix(in_);
+
+					for (int h = 1; h < weights.Length - 1; h++)
+					{
+						float[][] hid = new float[hidden_nodes][];
+						for (int i = 0; i < hidden_nodes; i++)
+						{
+							hid[i] = new float[hidden_nodes + 1];
+							for (int j = 0; j < hidden_nodes + 1; j++)
+							{
+								//hid[i][j] = modelTable.getFloat(j + i * (hidden_nodes + 1), "L" + h);
+								hid[i][j] = (float)modelTable.Rows[j + i * (hidden_nodes + 1)]["L" + h];
+							}
+						}
+						weights[h] = new Matrix(hid);
+					}
+
+					float[][] out_ = new float[4][];
+					for (int i = 0; i < 4; i++)
+					{
+						out_[i] = new float[hidden_nodes + 1];
+						for (int j = 0; j < hidden_nodes + 1; j++)
+						{
+							//out_[i][j] = modelTable.getFloat(j + i * (hidden_nodes + 1), "L" + (weights.Length - 1));
+							out_[i][j] = (float)modelTable.Rows[j + i * (hidden_nodes + 1)]["L" + (weights.Length - 1)];
+						}
+					}
+					weights[weights.Length - 1] = new Matrix(out_);
+
+					evolution = new List<int>();
+					int g = 0;
+					//int genscore = modelTable.getInt(g, "Graph");
+					int genscore = (int)modelTable.Rows[g]["Graph"];
+					while (genscore != 0)
+					{
+						evolution.Add(genscore);
+						g++;
+						//genscore = modelTable.getInt(g, "Graph");
+						genscore = (int)modelTable.Rows[g]["Graph"];
+					}
+					modelLoaded = true;
+					humanPlaying = false;
+					model = new Snake(weights.Length - 1);
+					model.brain.load(weights);
+				}
+		}
 	}
 
 	public enum eDirection

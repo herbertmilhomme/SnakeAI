@@ -3,54 +3,71 @@ using System.Collections.Generic;
 
 namespace SnakeAI.Shared
 {
-	public class Snake : ISnake //ToDo: abstract class
+	public abstract class Snake : ISnake
 	{
-		public int score = 1;
+		public virtual int score { get; set; }
 		/// <summary>
 		/// amount of moves the snake can make before it dies
 		/// </summary>
-		public int lifeLeft = 200;
+		public virtual int lifeLeft { get; set; }
 		/// <summary>
 		/// amount of time the snake has been alive
 		/// </summary>
-		public int lifetime = 0;
+		public virtual int lifetime { get; set; }
 		public int xVel, yVel;
 		/// <summary>
 		/// itterator to run through the foodlist (used for replay)
 		/// </summary>
-		public int foodItterate = 0;
+		public virtual int foodItterate { get; set; }
 
-		public float fitness = 0;
+		public virtual float fitness { get; set; }
 
-		public bool dead = false;
+		public virtual bool dead { get; set; }
 		/// <summary>
 		/// if this snake is a replay of best snake
 		/// </summary>
-		public bool replay = false;
+		public virtual bool replay { get; set; }
 
 		/// <summary>
 		/// snakes vision
 		/// </summary>
-		public float[] vision { get; set; }
+		public virtual float[] vision { get; set; }
 		/// <summary>
 		/// snakes decision
 		/// </summary>
-		public float[] decision { get; set; }
+		public virtual float[] decision { get; set; }
 
-		public Vector head { get; set; }
+		public virtual Vector head { get; set; }
 
 		/// <summary>
 		/// snakes body
 		/// </summary>
-		public List<Vector> body { get; set; }
+		public virtual List<Vector> body { get; set; }
 		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		public List<Food> foodList { get; set; }
-		public Food food { get; set; }
-		public NeuralNet brain { get; set; }
+		public virtual List<Food> foodList { get; set; }
+		public virtual Food food { get; set; }
+		public virtual NeuralNet brain { get; set; }
 
-		public Snake() : this(Core.hidden_layers) { }
+		public Snake() : this(Core.hidden_layers)
+		{
+			this.lifeLeft = 200;
+			this.lifetime = 0;
+			//this.xVel = xVel;
+			//this.yVel = yVel;
+			this.foodItterate = 0;
+			this.fitness = 0;
+			this.dead = false;
+			this.replay = false;
+			//this.vision = vision;
+			//this.decision = decision;
+			//this.head = head;
+			//this.body = body;
+			//this.foodList = foodList;
+			//this.food = food;
+			//this.brain = brain;
+		}
 
 		public Snake(int layers)
 		{
@@ -164,7 +181,7 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// move the snake
 		/// </summary>
-		public void move()
+		public virtual void move()
 		{
 			if (!dead)
 			{
@@ -275,35 +292,35 @@ namespace SnakeAI.Shared
 		/// clone a version of the snake that will be used for a replay
 		/// </summary>
 		/// <returns></returns>
-		public ISnake cloneForReplay()
-		{
-			Snake clone = new Snake(foodList);
-			clone.brain = brain.Clone();
-			return clone;
-		}
+		public abstract ISnake cloneForReplay();
+		//{
+		//	Snake clone = new Snake(foodList);
+		//	clone.brain = brain.Clone();
+		//	return clone;
+		//}
 
 		/// <summary>
 		/// clone the snake
 		/// </summary>
 		/// <returns></returns>
-		public ISnake Clone()
-		{
-			Snake clone = new Snake(Core.hidden_layers);
-			clone.brain = brain.Clone();
-			return clone;
-		}
+		public abstract ISnake Clone();
+		//{
+		//	Snake clone = new Snake(Core.hidden_layers);
+		//	clone.brain = brain.Clone();
+		//	return clone;
+		//}
 
 		/// <summary>
 		/// crossover the snake with another snake
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public ISnake crossover(ISnake parent)
-		{
-			Snake child = new Snake(Core.hidden_layers);
-			child.brain = brain.crossover(parent.brain);
-			return child;
-		}
+		public abstract ISnake crossover(ISnake parent);
+		//{
+		//	Snake child = new Snake(Core.hidden_layers);
+		//	child.brain = brain.crossover(parent.brain);
+		//	return child;
+		//}
 
 		/// <summary>
 		/// mutate the snakes brain
@@ -459,28 +476,28 @@ namespace SnakeAI.Shared
 			}
 		}
 
-		public void moveUp()
+		public virtual void moveUp()
 		{
 			if (yVel != Core.SIZE)
 			{
 				xVel = 0; yVel = -Core.SIZE;
 			}
 		}
-		public void moveDown()
+		public virtual void moveDown()
 		{
 			if (yVel != -Core.SIZE)
 			{
 				xVel = 0; yVel = Core.SIZE;
 			}
 		}
-		public void moveLeft()
+		public virtual void moveLeft()
 		{
 			if (xVel != Core.SIZE)
 			{
 				xVel = -Core.SIZE; yVel = 0;
 			}
 		}
-		public void moveRight()
+		public virtual void moveRight()
 		{
 			if (xVel != -Core.SIZE)
 			{

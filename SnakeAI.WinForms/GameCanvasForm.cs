@@ -14,6 +14,7 @@ namespace SnakeAI.WinForms
 {
 	public partial class GameCanvasForm : Form
 	{
+		private int hs;
 		private Snake m_Snake;
 		private Shared.Vector m_Fruit;
 		private GameManager m_GameManager;
@@ -72,14 +73,16 @@ namespace SnakeAI.WinForms
 		//ToDo: Add `SnakeAI.Core.Draw()` here...
 		private void UpdateScreen(object sender, EventArgs e)
 		{
-			if (m_GameManager.GameOver)
+			if (GameManager.humanPlaying)
 			{
-				//if (UserInputController.KeyPressed(Keys.Enter) || UserInputController.KeyPressed(Keys.Space))
-				//{
-					StartGame();
-				//}
-			}
-			else
+				if (m_GameManager.GameOver)
+				{
+					//if (UserInputController.KeyPressed(Keys.Enter) || UserInputController.KeyPressed(Keys.Space))
+					//{
+						StartGame();
+					//}
+				}
+				else
 			{
 				if (UserInputController.KeyPressed(Keys.Right))// && m_GameManager.Direction != eDirection.Left)
 					//m_GameManager.Direction = eDirection.Right;
@@ -96,6 +99,61 @@ namespace SnakeAI.WinForms
 
 				DoMove();
 			}
+			}
+			else
+			{
+				if (!GameManager.modelLoaded)
+				{
+					if (m_GameManager.pop.done())
+					{
+						//m_GameManager.highscore = pop.bestSnake.score;
+						m_GameManager.pop.calculateFitness();
+						m_GameManager.pop.naturalSelection();
+					}
+					else
+					{
+						m_GameManager.pop.update();
+						//Draw Neural Net
+						//m_GameManager.pop.show();
+						if (GameManager.replayBest)
+						{
+							m_GameManager.pop.bestSnake.show();
+							//show the brain of the best snake
+							//bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);
+							snake = m_GameManager.pop.bestSnake; //vision = m_GameManager.pop.bestSnake.vision; decision = m_GameManager.pop.bestSnake.decision;
+							this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+						}
+						else
+						{
+							for (int i = 0; i < m_GameManager.pop.Snakes.Length; i++)
+							{
+								m_GameManager.pop.Snakes[i].show();
+							}
+						}
+					}
+					GenLabel.Text = string.Format("GEN: {0}", m_GameManager.pop.gen.ToString());
+					ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.pop.bestSnakeScore.ToString());
+					//HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", m_GameManager.pop.gen.ToString());
+				}
+				else
+				{
+					m_GameManager.model.look();
+					m_GameManager.model.think();
+					m_GameManager.model.move();
+					//m_GameManager.model.show();
+					//Draw Neural Net
+					//m_GameManager.model.brain.show(0, 0, 360, 790, m_GameManager.model.vision, m_GameManager.model.decision);
+					snake = m_GameManager.model; //vision = m_GameManager.model.vision; decision = m_GameManager.model.decision;
+					this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+					//if (m_GameManager.model.dead)
+					//{
+					//	Snake newmodel = new Snake();
+					//	newmodel.brain = m_GameManager.model.brain.Clone();
+					//	m_GameManager.model = newmodel;
+					//}
+					//ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.model.score.ToString());
+				}
+			}
 
 			Canvas.Invalidate();
 		}
@@ -104,6 +162,7 @@ namespace SnakeAI.WinForms
 		{
 			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
 			m_Snake.body.Clear();
+			m_Snake.direction = eDirection.Down;
 			//GameOverPic.Hide();
 			//GameOverLabel.Hide();
 			Shared.Vector head = new Shared.Vector { x = (int)((Canvas.Size.Width / m_GameManager.Width )/ 2), y = 5 };//
@@ -243,6 +302,11 @@ namespace SnakeAI.WinForms
 			//m_GameManager.Score += m_GameManager.Points;
 			//ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.Score.ToString());
 			ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
+			if (m_Snake.Length - 1 > hs)
+			{
+				hs = m_Snake.Length - 1;
+				HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", hs.ToString());
+			}
 
 			GenerateFruit();
 		}
@@ -252,6 +316,7 @@ namespace SnakeAI.WinForms
 			m_GameManager.GameOver = true;
 		}
 
+		#region Event Handlers
 		private void GameCanvasForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
 		{
 			if (e.KeyCode == System.Windows.Forms.Keys.Up || 
@@ -274,5 +339,35 @@ namespace SnakeAI.WinForms
 		{
 			UserInputController.ChangeState(e.KeyCode, false);
 		}
+
+		private void GameCanvasForm_GraphMousePress(object sender, MouseEventArgs e)
+		{
+			//graph = new EvolutionGraph();
+		}
+
+		private void GameCanvasForm_LoadMousePress(object sender, MouseEventArgs e)
+		{
+			//selectInput("Load Snake Model", "fileSelectedIn");
+		}
+
+		private void GameCanvasForm_SaveMousePress(object sender, MouseEventArgs e)
+		{
+			//selectOutput("Save Snake Model", "fileSelectedOut");
+		}
+
+		private void GameCanvasForm_IncreaseMousePress(object sender, MouseEventArgs e)
+		{
+			//mutationRate *= 2;
+			//defaultmutation = mutationRate;
+			//MutationLabel.Text = string.Format("SCORE: {0}%", (mutationRate * 100).ToString());
+		}
+
+		private void GameCanvasForm_DecreaseMousePress(object sender, MouseEventArgs e)
+		{
+			//mutationRate /= 2;
+			//defaultmutation = mutationRate;
+			//MutationLabel.Text = string.Format("SCORE: {0}%", (mutationRate * 100).ToString());
+		}
+		#endregion
 	}
 }

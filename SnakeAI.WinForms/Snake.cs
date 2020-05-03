@@ -7,60 +7,59 @@ using SnakeAI.Shared;
 
 namespace SnakeAI.WinForms
 {
-	public class Snake : //SnakeAI.Shared.Snake, 
-		ISnake, IMovable
+	public class Snake : SnakeAI.Shared.Snake, ISnake, IMovable
 	{
-		public int score = 1;
+		/*public override int score = 1;
 		/// <summary>
 		/// amount of moves the snake can make before it dies
 		/// </summary>
-		public int lifeLeft = 200;
+		public override int lifeLeft = 200;
 		/// <summary>
 		/// amount of time the snake has been alive
 		/// </summary>
-		public int lifetime = 0;
-		public eDirection direction { get; private set; } = eDirection.Down;
+		public override int lifetime = 0;
 		/// <summary>
 		/// itterator to run through the foodlist (used for replay)
 		/// </summary>
-		public int foodItterate = 0;
+		public override int foodItterate = 0;
 
-		public float fitness = 0;
+		public override float fitness = 0;
 
-		public bool dead = false;
+		public override bool dead = false;
 		/// <summary>
 		/// if this snake is a replay of best snake
 		/// </summary>
-		public bool replay = false;
+		public override bool replay = false;
 
 		/// <summary>
 		/// snakes vision
 		/// </summary>
-		public float[] vision { get; set; }
+		public override float[] vision { get; set; }
 		/// <summary>
 		/// snakes decision
 		/// </summary>
-		public float[] decision { get; set; }
+		public override float[] decision { get; set; }
 
-		public Vector head { get; set; }
+		public override Vector head { get; set; }
 		/// <summary>
 		/// snakes body
 		/// </summary>
-		public List<Vector> body { get; set; }
+		public override List<Vector> body { get; set; }
 		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		public List<Food> foodList { get; set; }
-		public Food food { get; set; }
-		public NeuralNet brain { get; set; }
+		public override List<Food> foodList { get; set; }
+		public override Food food { get; set; }
+		public override NeuralNet brain { get; set; }*/
+		public eDirection direction { get; set; }
 		public int Length
 		{
 			get { return body.Count; }
 		}
 
-		public Snake() : this(Core.hidden_layers) { }
+		public Snake() : this(Core.hidden_layers) { direction = eDirection.Down; }
 
-		public Snake(int layers)
+		public Snake(int layers): base ()
 		{
 			head = new Vector(800, Core.height / 2);
 			food = new Food();
@@ -102,7 +101,7 @@ namespace SnakeAI.WinForms
 			score += 2;
 		}
 
-		/// <summary>
+		/*// <summary>
 		/// check if a position collides with the snakes body
 		/// </summary>
 		/// <param name="x"></param>
@@ -148,12 +147,12 @@ namespace SnakeAI.WinForms
 				return true;
 			}
 			return false;
-		}
+		}*/
 
 		/// <summary>
 		/// move the snake
 		/// </summary>
-		public void move()
+		public override void move()
 		{
 			if (!dead)
 			{
@@ -182,7 +181,7 @@ namespace SnakeAI.WinForms
 			}
 		}
 
-		/// <summary>
+		/*// <summary>
 		/// eat food
 		/// </summary>
 		public void eat()
@@ -231,13 +230,13 @@ namespace SnakeAI.WinForms
 				food = foodList[foodItterate];
 				foodItterate++;
 			}
-		}
+		}*/
 
 		/// <summary>
 		/// clone a version of the snake that will be used for a replay
 		/// </summary>
 		/// <returns></returns>
-		public ISnake cloneForReplay()
+		public override ISnake cloneForReplay()
 		{
 			Snake clone = new Snake(foodList);
 			clone.brain = brain.Clone();
@@ -248,7 +247,7 @@ namespace SnakeAI.WinForms
 		/// clone the snake
 		/// </summary>
 		/// <returns></returns>
-		public ISnake Clone()
+		public override ISnake Clone()
 		{
 			Snake clone = new Snake(Core.hidden_layers);
 			clone.brain = brain.Clone();
@@ -260,14 +259,14 @@ namespace SnakeAI.WinForms
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <returns></returns>
-		public ISnake crossover(ISnake parent)
+		public override ISnake crossover(ISnake parent)
 		{
 			Snake child = new Snake(Core.hidden_layers);
 			child.brain = brain.crossover(parent.brain);
 			return child;
 		}
 
-		/// <summary>
+		/*// <summary>
 		/// mutate the snakes brain
 		/// </summary>
 		public void mutate()
@@ -425,7 +424,7 @@ namespace SnakeAI.WinForms
 				//default:
 				//	return direction;
 			}
-		}
+		}*/
 
 		public void MoveLeft(int i_Index)
 		{
@@ -450,40 +449,40 @@ namespace SnakeAI.WinForms
 			body[i_Index] = new Vector(body[i_Index].x, body[i_Index].y+1);
 		}
 
-		public void moveUp()
+		public override void moveUp()
 		{
 			//if (yVel != Core.SIZE)
 			//{
 			//	xVel = 0; yVel = -Core.SIZE;
 			//}
-			if(direction != eDirection.Up)
+			if(direction != eDirection.Up && direction != eDirection.Down)
 				direction = eDirection.Up;
 		}
-		public void moveDown()
+		public override void moveDown()
 		{
 			//if (yVel != -Core.SIZE)
 			//{
 			//	xVel = 0; yVel = Core.SIZE;
 			//}
-			if(direction != eDirection.Down)
+			if(direction != eDirection.Down && direction != eDirection.Up)
 				direction = eDirection.Down;
 		}
-		public void moveLeft()
+		public override void moveLeft()
 		{
 			//if (xVel != Core.SIZE)
 			//{
 			//	xVel = -Core.SIZE; yVel = 0;
 			//}
-			if(direction != eDirection.Left)
+			if(direction != eDirection.Left && direction != eDirection.Right)
 				direction = eDirection.Left;
 		}
-		public void moveRight()
+		public override void moveRight()
 		{
 			//if (xVel != -Core.SIZE)
 			//{
 			//	xVel = Core.SIZE; yVel = 0;
 			//}
-			if(direction != eDirection.Right)
+			if(direction != eDirection.Right && direction != eDirection.Left)
 				direction = eDirection.Right;
 		}
 

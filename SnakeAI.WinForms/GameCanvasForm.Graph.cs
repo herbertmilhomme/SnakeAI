@@ -5,6 +5,9 @@ namespace SnakeAI.WinForms
 {
 	partial class GameCanvasForm
 	{
+		//float[] vision;
+		//float[] decision;
+		Shared.ISnake snake;
 		private void Graph_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics canvas = e.Graphics;
@@ -17,140 +20,140 @@ namespace SnakeAI.WinForms
 			float y = 0;
 			float w = 360;
 			float h = 790;
-			float[] vision;
-			float[] decision;
-			//float space = 5;
-			//float nSize = (h - (space * (iNodes - 2))) / iNodes;
-			//float nSpace = (w - (weights.Length * nSize)) / weights.Length;
-			//float hBuff = (h - (space * (hNodes - 1)) - (nSize * hNodes)) / 2;
-			//float oBuff = (h - (space * (oNodes - 1)) - (nSize * oNodes)) / 2;
-			//
-			//int maxIndex = 0;
-			//for (int i = 1; i < decision.Length; i++)
-			//{
-			//	if (decision[i] > decision[maxIndex])
-			//	{
-			//		maxIndex = i;
-			//	}
-			//}
-			//
-			////Layer Count
-			//int lc = 0;  
-			//Brushes fill;
-			//
-			////DRAW NODES
-			//for (int i = 0; i < iNodes; i++)
-			//{  
-			//	//DRAW INPUTS
-			//	if (vision[i] != 0)
-			//	{
-			//		fill = Brushes.Black; //(0, 255, 0);
-			//	}
-			//	else
-			//	{
-			//		fill = Brushes.Black; //(255);
-			//	}
-			//	//stroke(0);
-			//	//ellipseMode(CORNER);
-			//	canvas.FillEllipse(x, y + (i * (nSize + space)), nSize, nSize);
-			//	//textSize(nSize / 2);
-			//	//textAlign(CENTER, CENTER);
-			//	//fill(0);
-			//	//Text = string.Format(i);//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
-			//}
-			//
-			//lc++;
-			//
-			//for (int a = 0; a < hLayers; a++)
-			//{
-			//	for (int i = 0; i < hNodes; i++)
-			//	{  
-			//		//DRAW HIDDEN
-			//		fill = Brushes.Black; //(255);
-			//		//stroke(0);
-			//		//ellipseMode(CORNER);
-			//		canvas.FillEllipse(x + (lc * nSize) + (lc * nSpace), y + hBuff + (i * (nSize + space)), nSize, nSize);
-			//	}
-			//	lc++;
-			//}
-			//
-			//for (int i = 0; i < oNodes; i++)
-			//{  
-			//	//DRAW OUTPUTS
-			//	if (i == maxIndex)
-			//	{
-			//		fill = Brushes.Black; //(0, 255, 0);
-			//	}
-			//	else
-			//	{
-			//		fill = Brushes.Black; //(255);
-			//	}
-			//	//stroke(0);
-			//	//ellipseMode(CORNER);
-			//	canvas.FillEllipse(x + (lc * nSpace) + (lc * nSize), y + oBuff + (i * (nSize + space)), nSize, nSize);
-			//}
-			//
-			//lc = 1;
-			//Pens stroke;
-			//
-			////DRAW WEIGHTS
-			//for (int i = 0; i < weights[0].rows; i++)
-			//{  
-			//	//INPUT TO HIDDEN
-			//	for (int j = 0; j < weights[0].cols - 1; j++)
-			//	{
-			//		if (weights[0].matrix[i][j] < 0)
-			//		{
-			//			stroke = Pens.Blue; //(255, 0, 0);
-			//		}
-			//		else
-			//		{
-			//			stroke = Pens.Red; //(0, 0, 255);
-			//		}
-			//		canvas.DrawLine(stroke, x1: x + nSize, y1: y + (nSize / 2) + (j * (space + nSize)), x2: x + nSize + nSpace, y2: y + hBuff + (nSize / 2) + (i * (space + nSize)));
-			//	}
-			//}
-			//
-			//lc++;
-			//
-			//for (int a = 1; a < hLayers; a++)
-			//{
-			//	for (int i = 0; i < weights[a].rows; i++)
-			//	{  
-			//		//HIDDEN TO HIDDEN
-			//		for (int j = 0; j < weights[a].cols - 1; j++)
-			//		{
-			//			if (weights[a].matrix[i][j] < 0)
-			//			{
-			//				stroke = Pens.Blue; //(255, 0, 0);
-			//			}
-			//			else
-			//			{
-			//				stroke = Pens.Blue; //(0, 0, 255);
-			//			}
-			//			canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
-			//		}
-			//	}
-			//	lc++;
-			//}
-			//
-			//for (int i = 0; i < weights[weights.Length - 1].rows; i++)
-			//{  
-			//	//HIDDEN TO OUTPUT
-			//	for (int j = 0; j < weights[weights.Length - 1].cols - 1; j++)
-			//	{
-			//		if (weights[weights.Length - 1].matrix[i][j] < 0)
-			//		{
-			//			stroke = Pens.Blue; //(255, 0, 0);
-			//		}
-			//		else
-			//		{
-			//			stroke = Pens.Blue; //(0, 0, 255);
-			//		}
-			//		canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));
-			//	}
-			//}
-			//
+			float[] vision = snake.vision;
+			float[] decision = snake.decision;
+			float space = 5;
+			float nSize = (h - (space * (snake.brain.iNodes - 2))) / snake.brain.iNodes;
+			float nSpace = (w - (snake.brain.weights.Length * nSize)) / snake.brain.weights.Length;
+			float hBuff = (h - (space * (snake.brain.hNodes - 1)) - (nSize * snake.brain.hNodes)) / 2;
+			float oBuff = (h - (space * (snake.brain.oNodes - 1)) - (nSize * snake.brain.oNodes)) / 2;
+			
+			int maxIndex = 0;
+			for (int i = 1; i < decision.Length; i++)
+			{
+				if (decision[i] > decision[maxIndex])
+				{
+					maxIndex = i;
+				}
+			}
+			
+			//Layer Count
+			int lc = 0;  
+			Brush fill;
+			
+			//DRAW NODES
+			for (int i = 0; i < snake.brain.iNodes; i++)
+			{  
+				//DRAW INPUTS
+				if (vision[i] != 0)
+				{
+					fill = Brushes.Green; //(0, 255, 0);
+				}
+				else
+				{
+					fill = Brushes.White; //(255);
+				}
+				//stroke(0);
+				//ellipseMode(CORNER);
+				canvas.FillEllipse(fill, new Rectangle((int)x, (int)y + (int)(i * (nSize + space)), (int)nSize, (int)nSize));
+				//textSize(nSize / 2);
+				//textAlign(CENTER, CENTER);
+				//fill(0);
+				//Text = string.Format(i);//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
+			}
+			
+			lc++;
+			
+			for (int a = 0; a < snake.brain.hLayers; a++)
+			{
+				for (int i = 0; i < snake.brain.hNodes; i++)
+				{  
+					//DRAW HIDDEN
+					fill = Brushes.White; //(255);
+					//stroke(0);
+					//ellipseMode(CORNER);
+					canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSize) + (lc * nSpace)), (int)(y + hBuff + (i * (nSize + space))), (int)nSize, (int)nSize));
+				}
+				lc++;
+			}
+			
+			for (int i = 0; i < snake.brain.oNodes; i++)
+			{  
+				//DRAW OUTPUTS
+				if (i == maxIndex)
+				{
+					fill = Brushes.Green; //(0, 255, 0);
+				}
+				else
+				{
+					fill = Brushes.White; //(255);
+				}
+				//stroke(0);
+				//ellipseMode(CORNER);
+				canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSpace) + (lc * nSize)), (int)(y + oBuff + (i * (nSize + space))), (int)nSize, (int)nSize));
+			}
+			
+			lc = 1;
+			Pen stroke;
+			
+			//DRAW WEIGHTS
+			for (int i = 0; i < snake.brain.weights[0].rows; i++)
+			{  
+				//INPUT TO HIDDEN
+				for (int j = 0; j < snake.brain.weights[0].cols - 1; j++)
+				{
+					if (snake.brain.weights[0].matrix[i][j] < 0)
+					{
+						stroke = Pens.Blue; //(255, 0, 0);
+					}
+					else
+					{
+						stroke = Pens.Red; //(0, 0, 255);
+					}
+					canvas.DrawLine(stroke, x1: x + nSize, y1: y + (nSize / 2) + (j * (space + nSize)), x2: x + nSize + nSpace, y2: y + hBuff + (nSize / 2) + (i * (space + nSize)));
+				}
+			}
+			
+			lc++;
+			
+			for (int a = 1; a < snake.brain.hLayers; a++)
+			{
+				for (int i = 0; i < snake.brain.weights[a].rows; i++)
+				{  
+					//HIDDEN TO HIDDEN
+					for (int j = 0; j < snake.brain.weights[a].cols - 1; j++)
+					{
+						if (snake.brain.weights[a].matrix[i][j] < 0)
+						{
+							stroke = Pens.Blue; //(255, 0, 0);
+						}
+						else
+						{
+							stroke = Pens.Blue; //(0, 0, 255);
+						}
+						canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
+					}
+				}
+				lc++;
+			}
+			
+			for (int i = 0; i < snake.brain.weights[snake.brain.weights.Length - 1].rows; i++)
+			{  
+				//HIDDEN TO OUTPUT
+				for (int j = 0; j < snake.brain.weights[snake.brain.weights.Length - 1].cols - 1; j++)
+				{
+					if (snake.brain.weights[snake.brain.weights.Length - 1].matrix[i][j] < 0)
+					{
+						stroke = Pens.Blue; //(255, 0, 0);
+					}
+					else
+					{
+						stroke = Pens.Blue; //(0, 0, 255);
+					}
+					canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));
+				}
+			}
+			
 			//fill(0);
 			//textSize(15);
 			//textAlign(CENTER, CENTER);
@@ -168,7 +171,7 @@ namespace SnakeAI.WinForms
 			//rectMode(CORNER);
 			//rect(400 + SIZE, SIZE, width - 400 - 40, height - 40);
 			//textFont(font);
-			/*if (humanPlaying)
+			/*if (GameManager.humanPlaying)
 			{
 				//snake.move();
 				//snake.show();

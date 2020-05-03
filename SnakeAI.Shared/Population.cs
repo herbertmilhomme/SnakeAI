@@ -1,27 +1,35 @@
 namespace SnakeAI.Shared
 {
-	public class Population
+	public abstract class Population
 	{
-
-		Snake[] snakes;
+		public Snake[] Snakes { get { return snakes; } }
+		protected Snake[] snakes { get; set; }
 		public Snake bestSnake;
 
 		public int bestSnakeScore = 0;
 		public int gen = 0;
-		int samebest = 0;
+		//int samebest = 0;
 
 		public float bestFitness = 0;
-		float fitnessSum = 0;
+		private float fitnessSum = 0;
 
-		public Population(int size)
+		public Population()
+		{
+			this.bestSnakeScore = 0;
+			this.gen = 0;
+			//this.samebest = 0;
+			this.bestFitness = 0;
+			this.fitnessSum = 0;
+		}
+		public Population(int size) : this ()
 		{
 			snakes = new Snake[size];
-			for (int i = 0; i < snakes.Length; i++)
-			{
-				snakes[i] = new Snake();
-			}
-			bestSnake = (Snake)snakes[0].Clone();
-			bestSnake.replay = true;
+			//for (int i = 0; i < snakes.Length; i++)
+			//{
+			//	snakes[i] = new Snake();
+			//}
+			//bestSnake = (Snake)snakes[0].Clone();
+			//bestSnake.replay = true;
 		}
 
 		/// <summary>
@@ -68,21 +76,21 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// show either the best snake or all the snakes
 		/// </summary>
-		public void show()
+		[System.Obsolete] public void show()
 		{  
-			if (Core.replayBest)
-			{
-				bestSnake.show();
-				//show the brain of the best snake
-				bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);  
-			}
-			else
-			{
-				for (int i = 0; i < snakes.Length; i++)
-				{
-					snakes[i].show();
-				}
-			}
+			//if (Core.replayBest)
+			//{
+			//	bestSnake.show();
+			//	//show the brain of the best snake
+			//	bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);  
+			//}
+			//else
+			//{
+			//	for (int i = 0; i < snakes.Length; i++)
+			//	{
+			//		snakes[i].show();
+			//	}
+			//}
 		}
 
 		/// <summary>
