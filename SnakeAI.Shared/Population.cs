@@ -8,7 +8,7 @@ namespace SnakeAI.Shared
 
 		public int bestSnakeScore = 0;
 		public int gen = 0;
-		//int samebest = 0;
+		public int samebest = 0;
 
 		public float bestFitness = 0;
 		private float fitnessSum = 0;
@@ -17,7 +17,7 @@ namespace SnakeAI.Shared
 		{
 			this.bestSnakeScore = 0;
 			this.gen = 0;
-			//this.samebest = 0;
+			this.samebest = 0;
 			this.bestFitness = 0;
 			this.fitnessSum = 0;
 		}
@@ -96,7 +96,7 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// set the best snake of the generation
 		/// </summary>
-		public void setBestSnake()
+		public virtual void setBestSnake()
 		{  
 			float max = 0;
 			int maxIndex = 0;
@@ -113,18 +113,18 @@ namespace SnakeAI.Shared
 				bestFitness = max;
 				bestSnake = (Snake)snakes[maxIndex].cloneForReplay();
 				bestSnakeScore = snakes[maxIndex].score;
-				//samebest = 0;
-				//mutationRate = defaultMutation;
+				samebest = 0;
+				Core.mutationRate = Core.defaultmutation;
 			}
 			else
 			{
 				bestSnake = (Snake)bestSnake.cloneForReplay();
-				/*samebest++;
+				samebest++;
 				//if the best snake has remained the same for more than 3 generations, raise the mutation rate
 				if(samebest > 2) {  
-				   mutationRate *= 2;
+				   Core.mutationRate *= 2;
 				   samebest = 0;
-				}*/
+				}
 			}
 		}
 
