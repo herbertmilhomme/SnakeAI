@@ -44,12 +44,12 @@ namespace SnakeAI.WinForms
 		/// <summary>
 		/// snakes body
 		/// </summary>
-		public override List<Vector> body { get; set; }
+		public override List<Vector> body { get; set; }*/
 		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		public override List<Food> foodList { get; set; }
-		public override Food food { get; set; }
+		new public List<Vector> foodList { get; set; }
+		/*public override Food food { get; set; }
 		public override NeuralNet brain { get; set; }*/
 		public eDirection direction { get; set; }
 
@@ -58,14 +58,14 @@ namespace SnakeAI.WinForms
 		public Snake(int layers): base ()
 		{
 			head = new Vector(800, Core.height / 2);
-			food = new Food();
+			//food = new Vector();
 			body = new List<Vector>();
 			if (!Core.humanPlaying)
 			{
 				vision = new float[24];
 				decision = new float[4];
-				foodList = new List<Food>();
-				foodList.Add(food.Clone());
+				foodList = new List<Vector>();
+				foodList.Add(GameManager.Food);
 				brain = new NeuralNet(24, Core.hidden_nodes, 4, layers);
 				body.Add(new Vector(800, (Core.height / 2) + Core.SIZE));
 				body.Add(new Vector(800, (Core.height / 2) + (2 * Core.SIZE)));
@@ -77,19 +77,20 @@ namespace SnakeAI.WinForms
 		/// this constructor passes in a list of food positions so that a replay can replay the best snake
 		/// </summary>
 		/// <param name="foods"></param>
-		public Snake(List<Food> foods)
+		public Snake(List<Vector> foods)
 		{
 			replay = true;
 			vision = new float[24];
 			decision = new float[4];
 			body = new List<Vector>();
-			foodList = new List<Food>(foods.Count);
+			foodList = new List<Vector>(foods.Count);
 			//clone all the food positions in the foodlist
-			foreach (Food f in foods)
+			foreach (Vector f in foods)
 			{
-				foodList.Add(f.Clone());
+				foodList.Add(f);
 			}
-			food = foodList[foodItterate];
+			//food = foodList[foodItterate];
+			GameManager.Food = foodList[foodItterate];
 			foodItterate++;
 			head = new Vector(800, Core.height / 2);
 			body.Add(new Vector(800, (Core.height / 2) + Core.SIZE));
@@ -145,7 +146,24 @@ namespace SnakeAI.WinForms
 			return false;
 		}*/
 
-		/// <summary>
+		public override void show()
+		{
+			//food.show();
+			//fill(255);
+			//stroke(0);
+			for (int i = 0; i < body.Count; i++) {
+				//rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
+				body[i] = new Vector() { x = body[i].x - 1, y = body[i].y};
+			}
+			//if (dead) {
+			//	fill(150);
+			//} else {
+			//	fill(255);
+			//}
+			//rect(head.x, head.y, Core.SIZE, Core.SIZE);
+		}
+
+		/*// <summary>
 		/// move the snake
 		/// </summary>
 		public override void move()
@@ -161,7 +179,7 @@ namespace SnakeAI.WinForms
 				{
 					eat();
 				}
-				//shiftBody();
+				shiftBody(); //ToDo: Replace with GameManager.DoMove()
 				if (wallCollide(head.x, head.y))
 				{
 					dead = true;
@@ -177,7 +195,7 @@ namespace SnakeAI.WinForms
 			}
 		}
 
-		/*// <summary>
+		/// <summary>
 		/// eat food
 		/// </summary>
 		public void eat()
@@ -227,6 +245,65 @@ namespace SnakeAI.WinForms
 				foodItterate++;
 			}
 		}*/
+
+		/// <summary>
+		/// shift the body to follow the head
+		/// </summary>
+		public override void shiftBody()
+		{
+			/*Vector vel = GetVector(direction);
+			//float tempx = head.x;
+			//float tempy = head.y;
+			Vector tempv = new Vector(head.x, head.y);
+			//head.x += xVel;
+			//head.y += yVel;
+			head = new Vector(head.x + vel.x, head.y + vel.y);
+			//float temp2x;
+			//float temp2y;
+			Vector temp2v;
+			for (int i = 0; i < Length; i++)
+			{
+				//temp2x = body[i].x;
+				//temp2y = body[i].y;
+				temp2v = new Vector(body[i].x, body[i].y);
+				//body[i].x = tempx;
+				//body[i].y = tempy;
+				body[i] = temp2v;
+				//tempx = temp2x;
+				//tempy = temp2y;
+				tempv = temp2v;
+			}*/
+
+			for (int i = GameManager.snake.Length - 1; i >= 0; i--)
+			{
+				//Move head
+				if (i == 0)
+				{
+					switch (((Snake)GameManager.snake).direction)//m_GameManager.Direction
+					{
+						case eDirection.Right:
+							((Snake)GameManager.snake).MoveRight(i);
+							break;
+						case eDirection.Left:
+							((Snake)GameManager.snake).MoveLeft(i);
+							break;
+						case eDirection.Up:
+							((Snake)GameManager.snake).MoveUp(i);
+							break;
+						case eDirection.Down:
+							((Snake)GameManager.snake).MoveDown(i);
+							break;
+					}
+				}
+				else
+				{
+					//Move body
+					//m_Snake.body[i].x = m_Snake.body[i - 1].x;
+					//m_Snake.body[i].y = m_Snake.body[i - 1].y;
+					GameManager.snake.body[i] = new Shared.Vector(GameManager.snake.body[i - 1].x, GameManager.snake.body[i - 1].y);
+				}
+			}
+		}
 
 		/// <summary>
 		/// clone a version of the snake that will be used for a replay
@@ -486,5 +563,21 @@ namespace SnakeAI.WinForms
 		{
 			body.Add(head);
 		}
+
+		//public Vector GetVector(eDirection direction)
+		//{
+		//	switch (direction)
+		//	{
+		//		case eDirection.Up:
+		//			return new Vector() { x = 0, y = -Core.SIZE };
+		//		case eDirection.Left:
+		//			break;
+		//		case eDirection.Right:
+		//			break;
+		//		case eDirection.Down:
+		//		default:
+		//			break;
+		//	}
+		//}
 	}
 }

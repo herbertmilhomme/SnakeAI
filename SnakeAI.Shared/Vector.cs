@@ -13,9 +13,14 @@ namespace SnakeAI.Shared
 			this.y = y;
 		}
 
+		/// <summary>
+		/// Sum two vector points into new location
+		/// </summary>
+		/// <param name="direction"></param>
 		public void Add(Vector direction)
 		{
-			//throw new NotImplementedException();
+			x += direction.x;
+			y += direction.y;
 		}
 	}
 }

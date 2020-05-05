@@ -17,7 +17,7 @@ namespace SnakeAI.WinForms
 			float y = 0;
 			float w = 360;
 			float h = 790;
-			Snake snake = (Snake)GameManager.model;
+			Snake snake = (Snake)GameManager.snake;
 			float[] vision = snake.vision;
 			float[] decision = snake.decision;
 			float space = 5;

@@ -25,11 +25,11 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// false for AI, true to play yourself
 		/// </summary>
-		public static bool humanPlaying = true;
+		public static bool humanPlaying = false;
 		/// <summary>
 		/// shows only the best of each generation
 		/// </summary>
-		public static bool replayBest = true;
+		public static bool replayBest = false;
 		/// <summary>
 		/// see the snakes vision
 		/// </summary>
@@ -49,9 +49,10 @@ namespace SnakeAI.Shared
 		public static EvolutionGraph graph { get; set; }
 
 		public static ISnake snake { get; set; }
-		public static ISnake model { get; set; }
+		//public static ISnake model { get; set; }
 
 		public static Population pop { get; protected set; }
+		public static Vector Food { get; set; }
 
 		#region Custom Rand Function
 		/// <summary>

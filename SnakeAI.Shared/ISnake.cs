@@ -24,6 +24,22 @@ namespace SnakeAI.Shared
 		void think();
 		bool wallCollide(float x, float y);
 
+		/// <summary>
+		/// amount of moves the snake can make before it dies
+		/// </summary>
+		int lifeLeft { get; set; }
+		/// <summary>
+		/// amount of time the snake has been alive
+		/// </summary>
+		int lifetime { get; set; }
+		/// <summary>
+		/// itterator to run through the foodlist (used for replay)
+		/// </summary>
+		int foodItterate { get; set; }
+		/// <summary>
+		/// if this snake is a replay of best snake
+		/// </summary>
+		bool replay { get; set; }
 
 		/// <summary>
 		/// snakes vision
@@ -39,10 +55,10 @@ namespace SnakeAI.Shared
 		/// snakes body
 		/// </summary>
 		List<Vector> body { get; set; }
-		/// <summary>
+		/*// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		List<Food> foodList { get; set; }
+		List<Vector> foodList { get; set; }*/
 		Food food { get; set; }
 		NeuralNet brain { get; set; }
 		int Length { get; }

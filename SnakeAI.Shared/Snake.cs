@@ -14,7 +14,7 @@ namespace SnakeAI.Shared
 		/// amount of time the snake has been alive
 		/// </summary>
 		public virtual int lifetime { get; set; }
-		public int xVel, yVel;
+		private int xVel, yVel;
 		/// <summary>
 		/// itterator to run through the foodlist (used for replay)
 		/// </summary>
@@ -166,21 +166,21 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// show the snake
 		/// </summary>
-		public virtual void show()
-		{
-			//food.show();
-			//fill(255);
-			//stroke(0);
-			//for (int i = 0; i < body.Count; i++) {
-			//	rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
-			//}
-			//if (dead) {
-			//	fill(150);
-			//} else {
-			//	fill(255);
-			//}
-			//rect(head.x, head.y, Core.SIZE, Core.SIZE);
-		}
+		public abstract void show();
+		//{
+		//	//food.show();
+		//	//fill(255);
+		//	//stroke(0);
+		//	//for (int i = 0; i < body.Count; i++) {
+		//	//	rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
+		//	//}
+		//	//if (dead) {
+		//	//	fill(150);
+		//	//} else {
+		//	//	fill(255);
+		//	//}
+		//	//rect(head.x, head.y, Core.SIZE, Core.SIZE);
+		//}
 
 		/// <summary>
 		/// move the snake
@@ -267,14 +267,14 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// shift the body to follow the head
 		/// </summary>
-		public void shiftBody()
+		public virtual void shiftBody()
 		{
 			//float tempx = head.x;
 			//float tempy = head.y;
 			Vector tempv = new Vector(head.x, head.y);
 			//head.x += xVel;
 			//head.y += yVel;
-			head = new Vector(head.x + xVel, head.y + xVel);
+			head = new Vector(head.x + xVel, head.y + yVel);
 			//float temp2x;
 			//float temp2y;
 			Vector temp2v;

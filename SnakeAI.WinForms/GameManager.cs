@@ -136,8 +136,8 @@ namespace SnakeAI.WinForms
 					}
 					modelLoaded = true;
 					humanPlaying = false;
-					model = new Snake(weights.Length - 1);
-					model.brain.load(weights);
+					snake = new Snake(weights.Length - 1);
+					snake.brain.load(weights);
 				}
 		}
 	}

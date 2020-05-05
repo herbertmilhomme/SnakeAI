@@ -16,7 +16,7 @@ namespace SnakeAI.WinForms
 	{
 		//private int hs;
 		//private Snake m_Snake;
-		private Shared.Vector m_Fruit;
+		//private Shared.Vector m_Fruit;
 		private GameManager m_GameManager;
 		private System.Drawing.Text.PrivateFontCollection pfc;
 
@@ -33,7 +33,7 @@ namespace SnakeAI.WinForms
 			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
 			m_GameManager.setup();
 			GameManager.snake = new Snake();
-			m_Fruit = new Shared.Vector();
+			GameManager.Food = new Shared.Vector();
 
 			GameTimer.Interval = 1000 / m_GameManager.Speed;
 			GameTimer.Tick += UpdateScreen;
@@ -120,7 +120,7 @@ namespace SnakeAI.WinForms
 							GameManager.pop.bestSnake.show();
 							//show the brain of the best snake
 							//bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);
-							GameManager.model = GameManager.pop.bestSnake; //vision = m_GameManager.pop.bestSnake.vision; decision = m_GameManager.pop.bestSnake.decision;
+							GameManager.snake = GameManager.pop.bestSnake; //vision = m_GameManager.pop.bestSnake.vision; decision = m_GameManager.pop.bestSnake.decision;
 							this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
 						}
 						else
@@ -137,21 +137,21 @@ namespace SnakeAI.WinForms
 				}
 				else
 				{
-					GameManager.model.look();
-					GameManager.model.think();
-					GameManager.model.move();
+					GameManager.snake.look();
+					GameManager.snake.think();
+					GameManager.snake.move();
 					//m_GameManager.model.show();
 					//Draw Neural Net
 					//m_GameManager.model.brain.show(0, 0, 360, 790, m_GameManager.model.vision, m_GameManager.model.decision);
 					//snake = GameManager.model; //vision = m_GameManager.model.vision; decision = m_GameManager.model.decision;
 					this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
-					//if (m_GameManager.model.dead)
-					//{
-					//	Snake newmodel = new Snake();
-					//	newmodel.brain = m_GameManager.model.brain.Clone();
-					//	m_GameManager.model = newmodel;
-					//}
-					//ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.model.score.ToString());
+					if (((Snake)GameManager.snake).dead)
+					{
+						Snake newmodel = new Snake();
+						newmodel.brain = GameManager.snake.brain.Clone();
+						GameManager.snake = newmodel;
+					}
+					ScoreLabel.Text = string.Format("SCORE: {0}", ((Snake)GameManager.snake).score.ToString());
 				}
 			}
 
@@ -195,8 +195,8 @@ namespace SnakeAI.WinForms
 
 
 					canvas.FillRectangle(Brushes.Red,
-						new Rectangle((int)m_Fruit.x * m_GameManager.Width,
-							 (int)m_Fruit.y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
+						new Rectangle((int)GameManager.Food.x * m_GameManager.Width,
+							 (int)GameManager.Food.y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
 				}
 				for (int x = 1; x < Canvas.Size.Width / m_GameManager.Width; x++)
 				{
@@ -226,15 +226,34 @@ namespace SnakeAI.WinForms
 		private void GenerateFruit()
 		{
 			int maxXPosition = Canvas.Size.Width / m_GameManager.Width;
-			int maxYPositon = Canvas.Size.Height / m_GameManager.Height;
+			int maxYPositon = Canvas.Size.Height / m_GameManager.Height;;
+			
+			if (!GameManager.snake.replay)
+			{
+				do
+					GameManager.Food = new Shared.Vector { x = GameManager.Rand.Next(0, maxXPosition), y = GameManager.Rand.Next(0, maxYPositon) };
+				while (GameManager.snake.bodyCollide(GameManager.Food.x, GameManager.Food.y));
 
-			//Random random = new Random();
-
-			m_Fruit = new Shared.Vector { x = Shared.Core.Rand.Next(0, maxXPosition), y = Shared.Core.Rand.Next(0, maxYPositon) };
+				if (!GameManager.humanPlaying)
+					((Snake)GameManager.snake).foodList.Add(GameManager.Food);
+			}
+			//if the snake is a replay, then we dont want to create new random foods, 
+			//want to see the positions the best snake had to collect
+			else
+			{
+				GameManager.Food = ((Snake)GameManager.snake).foodList[GameManager.snake.foodItterate];
+				GameManager.snake.foodItterate++;
+			}
 		}
 
 		private void DoMove()
 		{
+			if (!GameManager.humanPlaying && !GameManager.modelLoaded)
+			{
+				GameManager.snake.lifetime++;
+				GameManager.snake.lifeLeft--;
+			}
+
 			for (int i = GameManager.snake.Length - 1; i >= 0; i--)
 			{
 				//Move head
@@ -259,12 +278,14 @@ namespace SnakeAI.WinForms
 					int maxXPos = Canvas.Size.Width / m_GameManager.Width;
 					int maxYPos = Canvas.Size.Height / m_GameManager.Height;
 
+					//if wall collide
 					if (GameManager.snake.body[i].x < 0 || GameManager.snake.body[i].y < 0
 						|| GameManager.snake.body[i].x >= maxXPos || GameManager.snake.body[i].y >= maxYPos)
 					{
 						Die();
 					}
 
+					//if body collide
 					for (int j = 1; j < GameManager.snake.Length; j++)
 					{
 						if (GameManager.snake.body[i].x == GameManager.snake.body[j].x &&
@@ -274,11 +295,16 @@ namespace SnakeAI.WinForms
 						}
 					}
 
-					if (GameManager.snake.body[0].x == m_Fruit.x && GameManager.snake.body[0].y == m_Fruit.y)
+					//if food collide
+					if (GameManager.snake.body[0].x == GameManager.Food.x && GameManager.snake.body[0].y == GameManager.Food.y)
 					{
 						Eat();
 					}
 
+					if (GameManager.snake.lifeLeft <= 0 && !GameManager.humanPlaying)
+					{
+						Die(); //dead = true;
+					}
 				}
 				else
 				{
@@ -292,6 +318,13 @@ namespace SnakeAI.WinForms
 
 		private void Eat()
 		{
+			if (!GameManager.humanPlaying && !GameManager.modelLoaded)
+				if (GameManager.snake.lifeLeft < 500)
+					if (GameManager.snake.lifeLeft > 400)
+						GameManager.snake.lifeLeft = 500;
+					else
+						GameManager.snake.lifeLeft += 100;
+
 			Shared.Vector piece = new Shared.Vector
 			{
 				x = GameManager.snake.body[m_GameManager.Score].x,
@@ -313,6 +346,7 @@ namespace SnakeAI.WinForms
 
 		private void Die()
 		{
+			((Snake)GameManager.snake).dead = true;
 			m_GameManager.GameOver = true;
 		}
 
