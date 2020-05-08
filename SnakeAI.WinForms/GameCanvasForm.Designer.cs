@@ -73,7 +73,7 @@ namespace SnakeAI.WinForms
 			this.Background.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.Background.TabIndex = 0;
 			this.Background.TabStop = false;
-			//this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+			this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
 			// 
 			// ScoreLabel
 			// 

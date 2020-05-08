@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Button.cs" />
     <Compile Include="EvolutionGraph.cs" />
     <Compile Include="Food.cs" />
     <Compile Include="ISnake.cs" />

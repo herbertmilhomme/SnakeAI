@@ -25,7 +25,7 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// false for AI, true to play yourself
 		/// </summary>
-		public static bool humanPlaying = false;
+		public static bool humanPlaying = true;
 		/// <summary>
 		/// shows only the best of each generation
 		/// </summary>
@@ -52,7 +52,7 @@ namespace SnakeAI.Shared
 		//public static ISnake model { get; set; }
 
 		public static Population pop { get; protected set; }
-		public static Vector Food { get; set; }
+		//public static Vector Food { get; set; }
 
 		#region Custom Rand Function
 		/// <summary>
@@ -69,18 +69,18 @@ namespace SnakeAI.Shared
 		{
 			//lock (Rand)
 			//{
-			if (!seed.HasValue)
-			{
-				//seed = (UInt16)new Random().Next(0, UInt16.MaxValue);
-				seed = (UInt16)new Random(DateTime.Now.Millisecond).Next(0, UInt16.MaxValue);
-				seed ^= (UInt16)System.DateTime.Now.Ticks;
-				seed &= UInt16.MaxValue;
-			}
-			if (!useFixedSeed)
-			{
-				seed = (UInt16)(seed * 0x41C64E6D + 0x6073);
-			}
-			return seed.Value;
+				if (!seed.HasValue)
+				{
+					//seed = (UInt16)new Random().Next(0, UInt16.MaxValue);
+					seed = (UInt16)new Random(DateTime.Now.Millisecond).Next(0, UInt16.MaxValue);
+					seed ^= (UInt16)System.DateTime.Now.Ticks;
+					seed &= UInt16.MaxValue;
+				}
+				if (!useFixedSeed)
+				{
+					seed = (UInt16)(seed * 0x41C64E6D + 0x6073);
+				}
+				return seed.Value;
 			//}
 		}
 		#endregion
@@ -90,7 +90,7 @@ namespace SnakeAI.Shared
 		//	//size(1200, 800);
 		//}
 
-		public abstract void setup();
+		//public abstract void setup();
 		//{
 		//	//font = createFont("agencyfb-bold.ttf", 32);
 		//	evolution = new List<int>();
@@ -189,7 +189,7 @@ namespace SnakeAI.Shared
 		//	}
 		//}
 
-		public abstract void fileSelectedIn(string path);
+		//public abstract void fileSelectedIn(string path);
 		/*{
 			using (FileStream selection = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				if (selection == null)
@@ -260,7 +260,7 @@ namespace SnakeAI.Shared
 				}
 		}*/
 
-		public void fileSelectedOut(string path)
+		public static void fileSelectedOut(string path)
 		{
 			using (FileStream selection = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				if (selection == null)

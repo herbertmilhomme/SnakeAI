@@ -15,8 +15,9 @@ namespace SnakeAI.WinForms
 			{
 				snakes[i] = new Snake();
 			}
-			bestSnake = (Snake)snakes[0].Clone();
+			bestSnake = (Snake)snakes[0]; //.Clone();
 			bestSnake.replay = true;
+			GameManager.snake = bestSnake;
 		}
 	}
 }

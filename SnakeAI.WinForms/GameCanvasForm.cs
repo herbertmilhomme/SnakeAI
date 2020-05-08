@@ -17,7 +17,7 @@ namespace SnakeAI.WinForms
 		//private int hs;
 		//private Snake m_Snake;
 		//private Shared.Vector m_Fruit;
-		private GameManager m_GameManager;
+		//private GameManager m_GameManager;
 		private System.Drawing.Text.PrivateFontCollection pfc;
 
 		public GameCanvasForm()
@@ -30,17 +30,18 @@ namespace SnakeAI.WinForms
 			ScoreLabel.Parent = Background;
 			HighscoreLabel.Parent = Background;
 			MutationLabel.Parent = Background;
-			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
-			m_GameManager.setup();
-			GameManager.snake = new Snake();
-			GameManager.Food = new Shared.Vector();
+			Shared.Core.width = Canvas.Size.Width; Shared.Core.height = Canvas.Size.Height;
+			//m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
+			this.KeyPreview = true;
+			GameManager.setup();
+			//GameManager.snake = new Snake();
+			//GameManager.snake.food = new Shared.Vector();
 
-			GameTimer.Interval = 1000 / m_GameManager.Speed;
+			GameTimer.Interval = 1000 / GameManager.Speed;
 			GameTimer.Tick += UpdateScreen;
 			GameTimer.Start();
 
-			this.KeyPreview = true;
-			StartGame();
+			//StartGame();
 		}
 
 		private void InitCustomLabelFont()
@@ -66,8 +67,11 @@ namespace SnakeAI.WinForms
 
 		private void StartGame()
 		{
+			if(GameManager.humanPlaying)
+				this.KeyPreview = true;
+
 			ResetSettings();
-			GenerateFruit();
+			//GenerateFruit();
 		}
 
 		//ToDo: Add `SnakeAI.Core.Draw()` here...
@@ -75,7 +79,7 @@ namespace SnakeAI.WinForms
 		{
 			if (GameManager.humanPlaying)
 			{
-				if (m_GameManager.GameOver)
+				if (GameManager.GameOver)
 				{
 					//if (UserInputController.KeyPressed(Keys.Enter) || UserInputController.KeyPressed(Keys.Space))
 					//{
@@ -97,7 +101,14 @@ namespace SnakeAI.WinForms
 						//m_GameManager.Direction = eDirection.Down;
 						GameManager.snake.moveDown();
 
-					DoMove();
+					GameManager.snake.move();//DoMove();
+					ScoreLabel.Text = string.Format("SCORE: {0}", ((Snake)GameManager.snake).score.ToString());
+					//ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
+					if (((Snake)GameManager.snake).score > GameManager.highscore)
+					{
+						GameManager.highscore = ((Snake)GameManager.snake).score;
+						HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", GameManager.highscore.ToString());
+					}
 				}
 			}
 			else
@@ -117,19 +128,22 @@ namespace SnakeAI.WinForms
 						//m_GameManager.pop.show();
 						if (GameManager.replayBest)
 						{
-							GameManager.pop.bestSnake.show();
 							//show the brain of the best snake
 							//bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);
 							GameManager.snake = GameManager.pop.bestSnake; //vision = m_GameManager.pop.bestSnake.vision; decision = m_GameManager.pop.bestSnake.decision;
-							this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+							//this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+							//GameManager.pop.bestSnake.show();
+							for (int i = 0; i < GameManager.snake.body.Count; i++)
+								GameManager.snake.body[i] = new Shared.Vector() { x = GameManager.snake.body[i].x - 1, y = GameManager.snake.body[i].y };
 						}
 						else
-						{
 							for (int i = 0; i < GameManager.pop.Snakes.Length; i++)
 							{
-								GameManager.pop.Snakes[i].show();
+								//GameManager.pop.Snakes[i].show();
+								GameManager.snake = GameManager.pop.Snakes[i];
+								for (int j = 0; j < GameManager.snake.body.Count; j++)
+									GameManager.snake.body[j] = new Shared.Vector() { x = GameManager.snake.body[j].x - 1, y = GameManager.snake.body[j].y };
 							}
-						}
 					}
 					GenLabel.Text = string.Format("GEN: {0}", GameManager.pop.gen.ToString());
 					ScoreLabel.Text = string.Format("SCORE: {0}", GameManager.pop.bestSnakeScore.ToString());
@@ -144,7 +158,7 @@ namespace SnakeAI.WinForms
 					//Draw Neural Net
 					//m_GameManager.model.brain.show(0, 0, 360, 790, m_GameManager.model.vision, m_GameManager.model.decision);
 					//snake = GameManager.model; //vision = m_GameManager.model.vision; decision = m_GameManager.model.decision;
-					this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
+					//this.Background.Paint += new System.Windows.Forms.PaintEventHandler(this.Graph_Paint);
 					if (((Snake)GameManager.snake).dead)
 					{
 						Snake newmodel = new Snake();
@@ -156,19 +170,23 @@ namespace SnakeAI.WinForms
 			}
 
 			Canvas.Invalidate();
+			Background.Invalidate();
 		}
 
 		private void ResetSettings()
 		{
-			m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
-			GameManager.snake.body.Clear();
-			((Snake)GameManager.snake).direction = eDirection.Down;
+			//m_GameManager = new GameManager();//w: Canvas.Size.Width, h: Canvas.Size.Height
+			//GameManager.GameOver = false;
+			//GameManager.snake.body.Clear();
+			//((Snake)GameManager.snake).direction = eDirection.Down;
 			//GameOverPic.Hide();
 			//GameOverLabel.Hide();
-			Shared.Vector head = new Shared.Vector { x = (int)((Canvas.Size.Width / m_GameManager.Width )/ 2), y = 5 };//
-			((Snake)GameManager.snake).Add(head);
+			//Shared.Vector head = new Shared.Vector { x = (int)((Canvas.Size.Width / m_GameManager.Width )/ 2), y = 5 };
+			//Shared.Vector head = new Shared.Vector { x = (int)((Shared.Core.width / Shared.Core.SIZE) / 2), y = 5 };
+			//((Snake)GameManager.snake).Add(head);
+			GameManager.snake = new Snake();
 			//ScoreLabel.Text = m_GameManager.Score.ToString();
-			ScoreLabel.Text = string.Format("SCORE: {0}", (m_GameManager.Score).ToString());
+			ScoreLabel.Text = string.Format("SCORE: {0}", (((Snake)GameManager.snake).score).ToString());
 		}
 
 		private void Canvas_Paint(object sender, PaintEventArgs e)
@@ -178,7 +196,7 @@ namespace SnakeAI.WinForms
 			//ControlPaint.DrawBorder(canvas, Canvas.Bounds, Color.White, ButtonBorderStyle.Solid);
 			ControlPaint.DrawBorder(canvas, new Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height), Color.White, ButtonBorderStyle.Solid);
 			#region Snake Game
-			if (!m_GameManager.GameOver)
+			if (!GameManager.GameOver)
 			{
 				for (int i = 0; i < GameManager.snake.Length; i++)
 				{
@@ -189,22 +207,21 @@ namespace SnakeAI.WinForms
 						snakeColour = Brushes.Yellow;    //Rest of body
 
 					canvas.FillRectangle(snakeColour,
-						new Rectangle((int)GameManager.snake.body[i].x * m_GameManager.Width,
-									  (int)GameManager.snake.body[i].y * m_GameManager.Height,
-									  m_GameManager.Width, m_GameManager.Height));
-
+						new Rectangle((int)GameManager.snake.body[i].x * GameManager.Width,
+									  (int)GameManager.snake.body[i].y * GameManager.Height,
+									  GameManager.Width, GameManager.Height));
 
 					canvas.FillRectangle(Brushes.Red,
-						new Rectangle((int)GameManager.Food.x * m_GameManager.Width,
-							 (int)GameManager.Food.y * m_GameManager.Height, m_GameManager.Width, m_GameManager.Height));
+						new Rectangle((int)GameManager.snake.food.x * GameManager.Width,
+							 (int)GameManager.snake.food.y * GameManager.Height, GameManager.Width, GameManager.Height));
 				}
-				for (int x = 1; x < Canvas.Size.Width / m_GameManager.Width; x++)
+				for (int x = 1; x < Canvas.Size.Width / GameManager.Width; x++)
 				{
-					canvas.DrawLine(Pens.Black, x1: x * m_GameManager.Width, y1: 1, x2: x * m_GameManager.Width, y2: Canvas.Size.Height-2);
+					canvas.DrawLine(Pens.Black, x1: x * GameManager.Width, y1: 1, x2: x * GameManager.Width, y2: Canvas.Size.Height-2);
 				}
-				for (int y = 1; y < Canvas.Size.Height/m_GameManager.Height; y++)
+				for (int y = 1; y < Canvas.Size.Height/GameManager.Height; y++)
 				{
-					canvas.DrawLine(Pens.Black, x1: 1, y1: y * m_GameManager.Height, x2: Canvas.Size.Width-2, y2: y * m_GameManager.Height);
+					canvas.DrawLine(Pens.Black, x1: 1, y1: y * GameManager.Height, x2: Canvas.Size.Width-2, y2: y * GameManager.Height);
 				}
 			}
 			else
@@ -223,132 +240,132 @@ namespace SnakeAI.WinForms
 		//	GameOverLabel.Show();
 		//}
 
-		private void GenerateFruit()
-		{
-			int maxXPosition = Canvas.Size.Width / m_GameManager.Width;
-			int maxYPositon = Canvas.Size.Height / m_GameManager.Height;;
-			
-			if (!GameManager.snake.replay)
-			{
-				do
-					GameManager.Food = new Shared.Vector { x = GameManager.Rand.Next(0, maxXPosition), y = GameManager.Rand.Next(0, maxYPositon) };
-				while (GameManager.snake.bodyCollide(GameManager.Food.x, GameManager.Food.y));
+		//private void GenerateFruit()
+		//{
+		//	int maxXPosition = Canvas.Size.Width / m_GameManager.Width;
+		//	int maxYPositon = Canvas.Size.Height / m_GameManager.Height;
+		//
+		//	if (!GameManager.snake.replay)
+		//	{
+		//		do
+		//			GameManager.Food = new Shared.Vector { x = GameManager.Rand.Next(0, maxXPosition), y = GameManager.Rand.Next(0, maxYPositon) };
+		//		while (GameManager.snake.bodyCollide(GameManager.Food.x, GameManager.Food.y));
+		//
+		//		if (!GameManager.humanPlaying)
+		//			((Snake)GameManager.snake).foodList.Add(GameManager.Food);
+		//	}
+		//	//if the snake is a replay, then we dont want to create new random foods, 
+		//	//want to see the positions the best snake had to collect
+		//	else
+		//	{
+		//		GameManager.Food = ((Snake)GameManager.snake).foodList[GameManager.snake.foodItterate];
+		//		GameManager.snake.foodItterate++;
+		//	}
+		//}
 
-				if (!GameManager.humanPlaying)
-					((Snake)GameManager.snake).foodList.Add(GameManager.Food);
-			}
-			//if the snake is a replay, then we dont want to create new random foods, 
-			//want to see the positions the best snake had to collect
-			else
-			{
-				GameManager.Food = ((Snake)GameManager.snake).foodList[GameManager.snake.foodItterate];
-				GameManager.snake.foodItterate++;
-			}
-		}
+		//private void DoMove()
+		//{
+		//	if (!GameManager.humanPlaying && !GameManager.modelLoaded)
+		//	{
+		//		GameManager.snake.lifetime++;
+		//		GameManager.snake.lifeLeft--;
+		//	}
 
-		private void DoMove()
-		{
-			if (!GameManager.humanPlaying && !GameManager.modelLoaded)
-			{
-				GameManager.snake.lifetime++;
-				GameManager.snake.lifeLeft--;
-			}
+		//	for (int i = GameManager.snake.Length - 1; i >= 0; i--)
+		//	{
+		//		//Move head
+		//		if (i == 0)
+		//		{
+		//			switch (((Snake)GameManager.snake).direction)//m_GameManager.Direction
+		//			{
+		//				case eDirection.Right:
+		//					((Snake)GameManager.snake).MoveRight(i);
+		//					break;
+		//				case eDirection.Left:
+		//					((Snake)GameManager.snake).MoveLeft(i);
+		//					break;
+		//				case eDirection.Up:
+		//					((Snake)GameManager.snake).MoveUp(i);
+		//					break;
+		//				case eDirection.Down:
+		//					((Snake)GameManager.snake).MoveDown(i);
+		//					break;
+		//			}
 
-			for (int i = GameManager.snake.Length - 1; i >= 0; i--)
-			{
-				//Move head
-				if (i == 0)
-				{
-					switch (((Snake)GameManager.snake).direction)//m_GameManager.Direction
-					{
-						case eDirection.Right:
-							((Snake)GameManager.snake).MoveRight(i);
-							break;
-						case eDirection.Left:
-							((Snake)GameManager.snake).MoveLeft(i);
-							break;
-						case eDirection.Up:
-							((Snake)GameManager.snake).MoveUp(i);
-							break;
-						case eDirection.Down:
-							((Snake)GameManager.snake).MoveDown(i);
-							break;
-					}
+		//			int maxXPos = Canvas.Size.Width / GameManager.Width;
+		//			int maxYPos = Canvas.Size.Height / GameManager.Height;
 
-					int maxXPos = Canvas.Size.Width / m_GameManager.Width;
-					int maxYPos = Canvas.Size.Height / m_GameManager.Height;
+		//			//if wall collide
+		//			if (GameManager.snake.body[i].x < 0 || GameManager.snake.body[i].y < 0
+		//				|| GameManager.snake.body[i].x >= maxXPos || GameManager.snake.body[i].y >= maxYPos)
+		//			{
+		//				Die();
+		//			}
 
-					//if wall collide
-					if (GameManager.snake.body[i].x < 0 || GameManager.snake.body[i].y < 0
-						|| GameManager.snake.body[i].x >= maxXPos || GameManager.snake.body[i].y >= maxYPos)
-					{
-						Die();
-					}
+		//			//if body collide
+		//			for (int j = 1; j < GameManager.snake.Length; j++)
+		//			{
+		//				if (GameManager.snake.body[i].x == GameManager.snake.body[j].x &&
+		//				   GameManager.snake.body[i].y == GameManager.snake.body[j].y)
+		//				{
+		//					Die();
+		//				}
+		//			}
 
-					//if body collide
-					for (int j = 1; j < GameManager.snake.Length; j++)
-					{
-						if (GameManager.snake.body[i].x == GameManager.snake.body[j].x &&
-						   GameManager.snake.body[i].y == GameManager.snake.body[j].y)
-						{
-							Die();
-						}
-					}
+		//			//if food collide
+		//			if (GameManager.snake.body[0].x == GameManager.snake.food.x && GameManager.snake.body[0].y == GameManager.snake.food.y)
+		//			{
+		//				Eat();
+		//			}
 
-					//if food collide
-					if (GameManager.snake.body[0].x == GameManager.Food.x && GameManager.snake.body[0].y == GameManager.Food.y)
-					{
-						Eat();
-					}
-
-					if (GameManager.snake.lifeLeft <= 0 && !GameManager.humanPlaying)
-					{
-						Die(); //dead = true;
-					}
-				}
-				else
-				{
-					//Move body
-					//m_Snake.body[i].x = m_Snake.body[i - 1].x;
-					//m_Snake.body[i].y = m_Snake.body[i - 1].y;
-					GameManager.snake.body[i] = new Shared.Vector( GameManager.snake.body[i - 1].x, GameManager.snake.body[i - 1].y);
-				}
-			}
-		}
+		//			if (GameManager.snake.lifeLeft <= 0 && !GameManager.humanPlaying)
+		//			{
+		//				Die(); //dead = true;
+		//			}
+		//		}
+		//		else
+		//		{
+		//			//Move body
+		//			//m_Snake.body[i].x = m_Snake.body[i - 1].x;
+		//			//m_Snake.body[i].y = m_Snake.body[i - 1].y;
+		//			GameManager.snake.body[i] = new Shared.Vector( GameManager.snake.body[i - 1].x, GameManager.snake.body[i - 1].y);
+		//		}
+		//	}
+		//}
 
 		private void Eat()
 		{
-			if (!GameManager.humanPlaying && !GameManager.modelLoaded)
-				if (GameManager.snake.lifeLeft < 500)
-					if (GameManager.snake.lifeLeft > 400)
-						GameManager.snake.lifeLeft = 500;
-					else
-						GameManager.snake.lifeLeft += 100;
-
-			Shared.Vector piece = new Shared.Vector
-			{
-				x = GameManager.snake.body[m_GameManager.Score].x,
-				y = GameManager.snake.body[m_GameManager.Score].y
-			};
-			((Snake)GameManager.snake).Add(piece);
+			//if (!GameManager.humanPlaying && !GameManager.modelLoaded)
+			//	if (GameManager.snake.lifeLeft < 500)
+			//		if (GameManager.snake.lifeLeft > 400)
+			//			GameManager.snake.lifeLeft = 500;
+			//		else
+			//			GameManager.snake.lifeLeft += 100;
+			//
+			//Shared.Vector piece = new Shared.Vector
+			//{
+			//	x = GameManager.snake.body[m_GameManager.Score].x,
+			//	y = GameManager.snake.body[m_GameManager.Score].y
+			//};
+			//((Snake)GameManager.snake).Add(piece);
 
 			//m_GameManager.Score += m_GameManager.Points;
-			ScoreLabel.Text = string.Format("SCORE: {0}", m_GameManager.Score.ToString());
+			ScoreLabel.Text = string.Format("SCORE: {0}", ((Snake)GameManager.snake).score.ToString());
 			//ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
-			if (m_GameManager.Score > GameManager.highscore)
+			if (((Snake)GameManager.snake).score > GameManager.highscore)
 			{
-				GameManager.highscore = m_GameManager.Score;
+				GameManager.highscore = ((Snake)GameManager.snake).score;
 				HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", GameManager.highscore.ToString());
 			}
 
-			GenerateFruit();
+			//GenerateFruit();
 		}
 
-		private void Die()
-		{
-			((Snake)GameManager.snake).dead = true;
-			m_GameManager.GameOver = true;
-		}
+		//private void Die()
+		//{
+		//	((Snake)GameManager.snake).dead = true;
+		//	//GameManager.GameOver = true;
+		//}
 
 		#region Event Handlers
 		private void GameCanvasForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -392,7 +409,7 @@ namespace SnakeAI.WinForms
 				open.Title = "Load Snake Model";
 
 				if (open.ShowDialog() == DialogResult.OK)
-					m_GameManager.fileSelectedIn(open.FileName);
+					GameManager.fileSelectedIn(open.FileName);
 			}
 		}
 
@@ -405,9 +422,7 @@ namespace SnakeAI.WinForms
 				save.ShowDialog();
 
 				if (!string.IsNullOrEmpty(save.FileName) || !string.IsNullOrWhiteSpace(save.FileName))
-				{
-					m_GameManager.fileSelectedOut(save.FileName);
-				} 
+					GameManager.fileSelectedOut(save.FileName);
 			}
 		}
 

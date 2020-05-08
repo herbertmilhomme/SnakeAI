@@ -9,47 +9,47 @@ namespace SnakeAI.WinForms
 {
 	internal class GameManager : Core
 	{
-		public int Width
+		public static int Width
 		{
 			get { return Core.SIZE; }
 			//set { Core.SIZE = value; }
 		}
-		public int Height
+		public static int Height
 		{
 			get { return Core.SIZE; }
 			//set { Core.SIZE = value; }
 		}
-		public int Speed { get; set; }
-		public int Score
-		{
-			get { return snake == null ? 0 : snake.Length - 1; }//.score; }
-			//set { this.snake.score = value; }
-		}
+		public static int Speed = 8;
+		public static bool GameOver { get { return ((Snake)snake).dead; } }//; set; }
+		//public int Score
+		//{
+		//	get { return snake == null ? 0 : ((Snake)snake).score; }
+		//	//set { this.snake.score = value; }
+		//}
 		//public int Points { get; set; }
-		public bool GameOver { get; set; }
 		//public eDirection Direction { get; set; }
 
 		//public override ISnake snake { get; private set; }
 		//public override ISnake model { get; private set; }
 
-		public GameManager() : base()
-		{
-			//Width = 20;
-			//Height = 20;
-			Speed = 8;
-			//m_Score = 0;
-			//Points = 100;
-			GameOver = false;
-			//Direction = eDirection.Down;
-		}
+		//public GameManager() : base()
+		//{
+		//	//Width = 20;
+		//	//Height = 20;
+		//	Speed = 8;
+		//	//m_Score = 0;
+		//	//Points = 100;
+		//	GameOver = false;
+		//	//Direction = eDirection.Down;
+		//}
+		//
+		//public GameManager(int w, int h) : this()
+		//{
+		//	Core.width = w;
+		//	Core.height = h;
+		//}
 
-		public GameManager(int w, int h) : this()
-		{
-			Core.width = w;
-			Core.height = h;
-		}
-
-		public override void setup()
+		public static void setup()
 		{
 			//font = createFont("agencyfb-bold.ttf", 32);
 			evolution = new List<int>();
@@ -70,7 +70,7 @@ namespace SnakeAI.WinForms
 			}
 		}
 
-		public override void fileSelectedIn(string path)
+		public static void fileSelectedIn(string path)
 		{
 			using (System.IO.FileStream selection = System.IO.File.Open(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite))
 				if (selection == null)

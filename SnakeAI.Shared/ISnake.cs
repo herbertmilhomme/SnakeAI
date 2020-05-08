@@ -50,16 +50,16 @@ namespace SnakeAI.Shared
 		/// </summary>
 		float[] decision { get; set; }
 
-		Vector head { get; set; }
+		Vector head { get; }
 		/// <summary>
 		/// snakes body
 		/// </summary>
 		List<Vector> body { get; set; }
-		/*// <summary>
+		/// <summary>
 		/// list of food positions (used to replay the best snake)
 		/// </summary>
-		List<Vector> foodList { get; set; }*/
-		Food food { get; set; }
+		List<Vector> foodList { get; set; }
+		Vector food { get; }
 		NeuralNet brain { get; set; }
 		int Length { get; }
 	}
