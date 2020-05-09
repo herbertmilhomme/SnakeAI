@@ -63,14 +63,12 @@ namespace SnakeAI.Shared
 				bestSnake.move();
 			}
 			for (int i = 0; i < snakes.Length; i++)
-			{
 				if (!snakes[i].dead)
 				{
 					snakes[i].look();
 					snakes[i].think();
 					snakes[i].move();
 				}
-			}
 		}
 
 		/// <summary>

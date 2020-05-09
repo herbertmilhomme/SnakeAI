@@ -68,7 +68,7 @@ namespace SnakeAI.Shared
 			//this.decision = decision;
 			//this.head = head;
 			//this.body = body;
-			//this.foodList = foodList;
+			foodList = new List<Vector>();
 			//this.food = food;
 			//this.brain = brain;
 			body = new List<Vector>();
@@ -238,13 +238,9 @@ namespace SnakeAI.Shared
 				}
 			}
 			//if (len >= 0)
-			//{
 			//	body.Add(new Vector(body[len].x, body[len].y));
-			//}
 			//else
-			//{
 			//	body.Add(new Vector(head.x, head.y));
-			//}
 			Shared.Vector piece = new Shared.Vector
 			{
 				x = body[score].x,
@@ -473,13 +469,11 @@ namespace SnakeAI.Shared
 			int maxIndex = 0;
 			float max = 0;
 			for (int i = 0; i < decision.Length; i++)
-			{
 				if (decision[i] > max)
 				{
 					max = decision[i];
 					maxIndex = i;
 				}
-			}
 
 			switch (maxIndex)
 			{

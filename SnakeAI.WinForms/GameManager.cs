@@ -49,7 +49,7 @@ namespace SnakeAI.WinForms
 		//	Core.height = h;
 		//}
 
-		public static void setup()
+		static GameManager() //public static void setup()
 		{
 			//font = createFont("agencyfb-bold.ttf", 32);
 			evolution = new List<int>();
@@ -59,15 +59,15 @@ namespace SnakeAI.WinForms
 			//increaseMut = new Button(340, 85, 20, 20, "+");
 			//decreaseMut = new Button(365, 85, 20, 20, "-");
 			//frameRate(fps);
-			if (humanPlaying)
-			{
-				snake = new Snake();
-			}
-			else
-			{
-				//adjust size of population
-				pop = new Population(2000);
-			}
+			//if (humanPlaying)
+			//{
+			//	snake = new Snake();
+			//}
+			//else
+			//{
+			//	//adjust size of population
+			//	pop = new Population(2000);
+			//}
 		}
 
 		public static void fileSelectedIn(string path)

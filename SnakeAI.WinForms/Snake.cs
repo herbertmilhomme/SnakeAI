@@ -52,6 +52,7 @@ namespace SnakeAI.WinForms
 		public override Food food { get; set; }
 		public override NeuralNet brain { get; set; }*/
 		public eDirection direction { get; set; }
+		public List<KeyValuePair<System.Drawing.Brush, Vector>> view { get; set; }
 
 		public Snake() : this(Core.hidden_layers) {  }
 
@@ -72,6 +73,7 @@ namespace SnakeAI.WinForms
 			//	score += 2;
 			//}
 			direction = eDirection.Down; 
+			view = new List<KeyValuePair<System.Drawing.Brush, Vector>>();
 		}
 
 		/// <summary>
@@ -145,26 +147,26 @@ namespace SnakeAI.WinForms
 				return true;
 			}
 			return false;
-		}*/
+		}
 
-		//public override void show()
-		//{
-		//	//food.show();
-		//	//fill(255);
-		//	//stroke(0);
-		//	for (int i = 0; i < body.Count; i++) {
-		//		//rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
-		//		body[i] = new Vector() { x = body[i].x - 1, y = body[i].y};
-		//	}
-		//	//if (dead) {
-		//	//	fill(150);
-		//	//} else {
-		//	//	fill(255);
-		//	//}
-		//	//rect(head.x, head.y, Core.SIZE, Core.SIZE);
-		//}
+		public override void show()
+		{
+			//food.show();
+			//fill(255);
+			//stroke(0);
+			for (int i = 0; i < body.Count; i++) {
+				//rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
+				body[i] = new Vector() { x = body[i].x - 1, y = body[i].y};
+			}
+			//if (dead) {
+			//	fill(150);
+			//} else {
+			//	fill(255);
+			//}
+			//rect(head.x, head.y, Core.SIZE, Core.SIZE);
+		}
 
-		/*// <summary>
+		/// <summary>
 		/// move the snake
 		/// </summary>
 		public override void move()
@@ -401,14 +403,14 @@ namespace SnakeAI.WinForms
 			vision[21] = temp[0];
 			vision[22] = temp[1];
 			vision[23] = temp[2];
-		}
+		}*/
 
 		/// <summary>
 		/// look in a direction and check for food, body and wall
 		/// </summary>
 		/// <param name="direction"></param>
 		/// <returns></returns>
-		public virtual float[] lookInDirection(Vector direction)
+		public override float[] lookInDirection(Vector direction)
 		{
 			float[] look = new float[3];
 			Vector pos = new Vector(head.x, head.y);
@@ -429,36 +431,42 @@ namespace SnakeAI.WinForms
 					bodyFound = true;
 					look[1] = 1;
 				}
-				//if (replay && Core.seeVision) {
-				//	stroke(0, 255, 0);
-				//	point(pos.x, pos.y);
-				//	if (foodFound) {
-				//		noStroke();
-				//		fill(255, 255, 51);
-				//		ellipseMode(CENTER);
-				//		ellipse(pos.x, pos.y, 5, 5);
-				//	}
-				//	if (bodyFound) {
-				//		noStroke();
-				//		fill(102, 0, 102);
-				//		ellipseMode(CENTER);
-				//		ellipse(pos.x, pos.y, 5, 5);
-				//	}
-				//}
+				if (replay && Core.seeVision)
+				{
+					//stroke(0, 255, 0);
+					//point(pos.x, pos.y);
+					if (foodFound)
+					{
+						//noStroke();
+						//fill(255, 255, 51);
+						//ellipseMode(CENTER);
+						//ellipse(pos.x, pos.y, 5, 5);
+						view.Add(new KeyValuePair<System.Drawing.Brush, Vector>(System.Drawing.Brushes.Cyan,pos));
+					}
+					if (bodyFound)
+					{
+						//noStroke();
+						//fill(102, 0, 102);
+						//ellipseMode(CENTER);
+						//ellipse(pos.x, pos.y, 5, 5);
+						view.Add(new KeyValuePair<System.Drawing.Brush, Vector>(System.Drawing.Brushes.Violet,pos));
+					}
+				}
 				pos.Add(direction);
 				distance += 1;
 			}
-			//if (replay && Core.seeVision) {
-			//	noStroke();
-			//	fill(0, 255, 0);
-			//	ellipseMode(CENTER);
-			//	ellipse(pos.x, pos.y, 5, 5);
-			//}
+			if (replay && Core.seeVision) {
+				//noStroke();
+				//fill(0, 255, 0);
+				//ellipseMode(CENTER);
+				//ellipse(pos.x, pos.y, 5, 5);
+				view.Add(new KeyValuePair<System.Drawing.Brush, Vector>(System.Drawing.Brushes.Green,pos));
+			}
 			look[2] = 1 / distance;
 			return look;
 		}
 
-		/// <summary>
+		/*// <summary>
 		/// think about what direction to move
 		/// </summary>
 		public void think()//eDirection d = eDirection.Down
@@ -502,23 +510,23 @@ namespace SnakeAI.WinForms
 		{
 			//Body[i_Index].x--;
 			//Body[i_Index].x-=1;
-			//Body[i_Index] = new Vector(Body[i_Index].x-1, Body[i_Index].y);
-			body[i_Index] = new Vector() { x = body[i_Index].x - 1, y = body[i_Index].y};
+			body[i_Index] = new Vector(body[i_Index].x - 1, body[i_Index].y);
+			//body[i_Index] = new Vector() { x = body[i_Index].x - 1, y = body[i_Index].y};
 		}
 		public void MoveRight(int i_Index)
 		{
 			//Body[i_Index].x++;
-			body[i_Index] = new Vector(body[i_Index].x+1, body[i_Index].y);
+			body[i_Index] = new Vector(body[i_Index].x + 1, body[i_Index].y);
 		}
 		public void MoveUp(int i_Index)
 		{
 			//Body[i_Index].y--;
-			body[i_Index] = new Vector(body[i_Index].x, body[i_Index].y-1);
+			body[i_Index] = new Vector(body[i_Index].x, body[i_Index].y - 1);
 		}
 		public void MoveDown(int i_Index)
 		{
 			//Body[i_Index].y++;
-			body[i_Index] = new Vector(body[i_Index].x, body[i_Index].y+1);
+			body[i_Index] = new Vector(body[i_Index].x, body[i_Index].y + 1);
 		}
 
 		public override void moveUp()

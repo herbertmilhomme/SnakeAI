@@ -25,7 +25,7 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// false for AI, true to play yourself
 		/// </summary>
-		public static bool humanPlaying = true;
+		public static bool humanPlaying = false;
 		/// <summary>
 		/// shows only the best of each generation
 		/// </summary>
@@ -33,12 +33,12 @@ namespace SnakeAI.Shared
 		/// <summary>
 		/// see the snakes vision
 		/// </summary>
-		public static bool seeVision = false;
+		public static bool seeVision = true;
 		public static bool modelLoaded = false;
 
 		//PFont font;
 
-		public static List<int> evolution;
+		public static List<int> evolution { get; set; }
 
 		//Button graphButton;
 		//Button loadButton;
@@ -51,7 +51,7 @@ namespace SnakeAI.Shared
 		public static ISnake snake { get; set; }
 		//public static ISnake model { get; set; }
 
-		public static Population pop { get; protected set; }
+		public static Population pop { get; set; }
 		//public static Vector Food { get; set; }
 
 		#region Custom Rand Function
@@ -85,112 +85,112 @@ namespace SnakeAI.Shared
 		}
 		#endregion
 
-		//public virtual void settings()
-		//{
-		//	//size(1200, 800);
-		//}
+		/*public virtual void settings()
+		{
+			//size(1200, 800);
+		}
 
-		//public abstract void setup();
-		//{
-		//	//font = createFont("agencyfb-bold.ttf", 32);
-		//	evolution = new List<int>();
-		//	//graphButton = new Button(349, 15, 100, 30, "Graph");
-		//	//loadButton = new Button(249, 15, 100, 30, "Load");
-		//	//saveButton = new Button(149, 15, 100, 30, "Save");
-		//	//increaseMut = new Button(340, 85, 20, 20, "+");
-		//	//decreaseMut = new Button(365, 85, 20, 20, "-");
-		//	//frameRate(fps);
-		//	if (humanPlaying)
-		//	{
-		//		snake = new Snake();
-		//	}
-		//	else
-		//	{
-		//		//adjust size of population
-		//		pop = new Population(2000); 
-		//	}
-		//}
+		public abstract void setup();
+		{
+			//font = createFont("agencyfb-bold.ttf", 32);
+			evolution = new List<int>();
+			//graphButton = new Button(349, 15, 100, 30, "Graph");
+			//loadButton = new Button(249, 15, 100, 30, "Load");
+			//saveButton = new Button(149, 15, 100, 30, "Save");
+			//increaseMut = new Button(340, 85, 20, 20, "+");
+			//decreaseMut = new Button(365, 85, 20, 20, "-");
+			//frameRate(fps);
+			if (humanPlaying)
+			{
+				snake = new Snake();
+			}
+			else
+			{
+				//adjust size of population
+				pop = new Population(2000); 
+			}
+		}
 
-		//public virtual void draw()
-		//{
-		//	background(0);
-		//	noFill();
-		//	stroke(255);
-		//	line(400, 0, 400, height);
-		//	rectMode(CORNER);
-		//	rect(400 + SIZE, SIZE, width - 400 - 40, height - 40);
-		//	textFont(font);
-		//	if (humanPlaying)
-		//	{
-		//		snake.move();
-		//		snake.show();
-		//		fill(150);
-		//		textSize(20);
-		//		text("SCORE : " + snake.score, 500, 50);
-		//		if (snake.dead)
-		//		{
-		//			snake = new Snake();
-		//		}
-		//	}
-		//	else
-		//	{
-		//		if (!modelLoaded)
-		//		{
-		//			if (pop.done())
-		//			{
-		//				highscore = pop.bestSnake.score;
-		//				pop.calculateFitness();
-		//				pop.naturalSelection();
-		//			}
-		//			else
-		//			{
-		//				pop.update();
-		//				pop.show();
-		//			}
-		//			fill(150);
-		//			textSize(25);
-		//			textAlign(LEFT);
-		//			text("GEN : " + pop.gen, 120, 60);
-		//			//text("BEST FITNESS : "+pop.bestFitness,120,50);
-		//			//text("MOVES LEFT : "+pop.bestSnake.lifeLeft,120,70);
-		//			text("MUTATION RATE : " + mutationRate * 100 + "%", 120, 90);
-		//			text("SCORE : " + pop.bestSnake.score, 120, height - 45);
-		//			text("HIGHSCORE : " + highscore, 120, height - 15);
-		//			increaseMut.show();
-		//			decreaseMut.show();
-		//		}
-		//		else
-		//		{
-		//			model.look();
-		//			model.think();
-		//			model.move();
-		//			model.show();
-		//			model.brain.show(0, 0, 360, 790, model.vision, model.decision);
-		//			if (model.dead)
-		//			{
-		//				Snake newmodel = new Snake();
-		//				newmodel.brain = model.brain.Clone();
-		//				model = newmodel;
-		//			}
-		//			textSize(25);
-		//			fill(150);
-		//			textAlign(LEFT);
-		//			text("SCORE : " + model.score, 120, height - 45);
-		//		}
-		//		textAlign(LEFT);
-		//		textSize(18);
-		//		fill(255, 0, 0);
-		//		text("RED < 0", 120, height - 75);
-		//		fill(0, 0, 255);
-		//		text("BLUE > 0", 200, height - 75);
-		//		graphButton.show();
-		//		loadButton.show();
-		//		saveButton.show();
-		//	}
-		//}
+		public virtual void draw()
+		{
+			background(0);
+			noFill();
+			stroke(255);
+			line(400, 0, 400, height);
+			rectMode(CORNER);
+			rect(400 + SIZE, SIZE, width - 400 - 40, height - 40);
+			textFont(font);
+			if (humanPlaying)
+			{
+				snake.move();
+				snake.show();
+				fill(150);
+				textSize(20);
+				text("SCORE : " + snake.score, 500, 50);
+				if (snake.dead)
+				{
+					snake = new Snake();
+				}
+			}
+			else
+			{
+				if (!modelLoaded)
+				{
+					if (pop.done())
+					{
+						highscore = pop.bestSnake.score;
+						pop.calculateFitness();
+						pop.naturalSelection();
+					}
+					else
+					{
+						pop.update();
+						pop.show();
+					}
+					fill(150);
+					textSize(25);
+					textAlign(LEFT);
+					text("GEN : " + pop.gen, 120, 60);
+					//text("BEST FITNESS : "+pop.bestFitness,120,50);
+					//text("MOVES LEFT : "+pop.bestSnake.lifeLeft,120,70);
+					text("MUTATION RATE : " + mutationRate * 100 + "%", 120, 90);
+					text("SCORE : " + pop.bestSnake.score, 120, height - 45);
+					text("HIGHSCORE : " + highscore, 120, height - 15);
+					increaseMut.show();
+					decreaseMut.show();
+				}
+				else
+				{
+					model.look();
+					model.think();
+					model.move();
+					model.show();
+					model.brain.show(0, 0, 360, 790, model.vision, model.decision);
+					if (model.dead)
+					{
+						Snake newmodel = new Snake();
+						newmodel.brain = model.brain.Clone();
+						model = newmodel;
+					}
+					textSize(25);
+					fill(150);
+					textAlign(LEFT);
+					text("SCORE : " + model.score, 120, height - 45);
+				}
+				textAlign(LEFT);
+				textSize(18);
+				fill(255, 0, 0);
+				text("RED < 0", 120, height - 75);
+				fill(0, 0, 255);
+				text("BLUE > 0", 200, height - 75);
+				graphButton.show();
+				loadButton.show();
+				saveButton.show();
+			}
+		}
 
-		//public abstract void fileSelectedIn(string path);
-		/*{
+		public abstract void fileSelectedIn(string path);
+		{
 			using (FileStream selection = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				if (selection == null)
 				{
