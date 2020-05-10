@@ -56,7 +56,6 @@
       <DependentUpon>GameCanvasForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GameManager.cs" />
-    <Compile Include="IMovable.cs" />
     <Compile Include="GameCanvasForm.Graph.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -85,11 +85,13 @@ namespace SnakeAI.Shared
 				vision = new float[24];
 				decision = new float[4];
 				foodList = new List<Vector>();
-				foodList.Add(food);//.Clone()
+				//foodList.Add(food);//.Clone()
 				brain = new NeuralNet(24, Core.hidden_nodes, 4, layers);
-				body.Add(new Vector((int)((Core.width / Core.SIZE) * .5), (int)(Core.height * .3) + Core.SIZE));
-				body.Add(new Vector((int)((Core.width / Core.SIZE) * .5), (int)(Core.height * .3) + (2 * Core.SIZE)));
+				body.Add(new Vector(head.x, head.y - 1)); //new Vector((int)((Core.width / Core.SIZE) * .5), (int)((Core.height / Core.SIZE) * .3) + Core.SIZE));
+				body.Add(new Vector(head.x, head.y - 2)); //new Vector((int)((Core.width / Core.SIZE) * .5), (int)((Core.height / Core.SIZE) * .3) + (2 * Core.SIZE)));
 				//score += 2;
+				GenerateFruit();
+				foodList[0] = food;
 			}
 		}
 
@@ -111,9 +113,9 @@ namespace SnakeAI.Shared
 			//}
 			food = foodList[foodItterate];
 			foodItterate++;
-			Vector head = new Vector((int)((Core.width / Core.SIZE) * .5), (int)(Core.height * .3));
-			body.Add(new Vector((int)((Core.width / Core.SIZE) * .5), (int)(Core.height * .3) + Core.SIZE));
-			body.Add(new Vector((int)((Core.width / Core.SIZE) * .5), (int)(Core.height * .3) + (2 * Core.SIZE)));
+			Vector head = new Vector((int)((Core.width / Core.SIZE) * .5), (int)((Core.height / Core.SIZE) * .3));
+			body.Add(new Vector(head.x, head.y - 1)); //new Vector((int)((Core.width / Core.SIZE) * .5), (int)((Core.height / Core.SIZE) * .3) + Core.SIZE));
+			body.Add(new Vector(head.x, head.y - 2)); //new Vector((int)((Core.width / Core.SIZE) * .5), (int)((Core.height / Core.SIZE) * .3) + (2 * Core.SIZE)));
 			//score += 2;
 		}
 
@@ -201,18 +203,12 @@ namespace SnakeAI.Shared
 					eat();
 				}
 				shiftBody();
-				if (wallCollide(head.x, head.y))
-				{
-					dead = true;
-				}
+				if (wallCollide(head.x, head.y)) 
+					dead = true; 
 				else if (bodyCollide(head.x, head.y))
-				{
 					dead = true;
-				}
 				else if (lifeLeft <= 0 && !Core.humanPlaying)
-				{
 					dead = true;
-				}
 			}
 		}
 
@@ -369,17 +365,17 @@ namespace SnakeAI.Shared
 			vision[1] = temp[1];
 			vision[2] = temp[2];
 			//temp = lookInDirection(new Vector(-Core.SIZE, -Core.SIZE));
-			temp = lookInDirection(new Vector(-1, -1));
+			temp = lookInDirection(new Vector(-1, 1));
 			vision[3] = temp[0];
 			vision[4] = temp[1];
 			vision[5] = temp[2];
 			//temp = lookInDirection(new Vector(0, -Core.SIZE));
-			temp = lookInDirection(new Vector(0, -1));
+			temp = lookInDirection(new Vector(0, 1));
 			vision[6] = temp[0];
 			vision[7] = temp[1];
 			vision[8] = temp[2];
 			//temp = lookInDirection(new Vector(Core.SIZE, -Core.SIZE));
-			temp = lookInDirection(new Vector(1, -1));
+			temp = lookInDirection(new Vector(1, 1));
 			vision[9] = temp[0];
 			vision[10] = temp[1];
 			vision[11] = temp[2];
@@ -389,17 +385,17 @@ namespace SnakeAI.Shared
 			vision[13] = temp[1];
 			vision[14] = temp[2];
 			//temp = lookInDirection(new Vector(Core.SIZE, Core.SIZE));
-			temp = lookInDirection(new Vector(1, 1));
+			temp = lookInDirection(new Vector(1, -1));
 			vision[15] = temp[0];
 			vision[16] = temp[1];
 			vision[17] = temp[2];
 			//temp = lookInDirection(new Vector(0, Core.SIZE));
-			temp = lookInDirection(new Vector(0, 1));
+			temp = lookInDirection(new Vector(0, -1));
 			vision[18] = temp[0];
 			vision[19] = temp[1];
 			vision[20] = temp[2];
 			//temp = lookInDirection(new Vector(-Core.SIZE, Core.SIZE));
-			temp = lookInDirection(new Vector(-1, 1));
+			temp = lookInDirection(new Vector(-1, -1));
 			vision[21] = temp[0];
 			vision[22] = temp[1];
 			vision[23] = temp[2];

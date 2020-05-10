@@ -7,7 +7,7 @@ using SnakeAI.Shared;
 
 namespace SnakeAI.WinForms
 {
-	public class Snake : SnakeAI.Shared.Snake, ISnake, IMovable
+	public class Snake : SnakeAI.Shared.Snake, ISnake
 	{
 		/*public override int score = 1;
 		/// <summary>
@@ -99,6 +99,8 @@ namespace SnakeAI.WinForms
 			//body.Add(new Vector(800, (Core.height / 2) + Core.SIZE));
 			//body.Add(new Vector(800, (Core.height / 2) + (2 * Core.SIZE)));
 			//score += 2;
+			direction = eDirection.Down; 
+			view = new List<KeyValuePair<System.Drawing.Brush, Vector>>();
 		}
 
 		/*// <summary>

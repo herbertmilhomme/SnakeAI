@@ -58,7 +58,7 @@ namespace SnakeAI.WinForms
 					//textAlign(CENTER, CENTER);
 					//fill(0);
 					//Text = string.Format(i.ToString());//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
-					canvas.DrawString(i.ToString(), new Font("Agency FB", nSize * .5f, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), color, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space)));
+					canvas.DrawString(i.ToString(), new Font("Agency FB", nSize, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), color, i < 10 ? x + (int)(nSize * .25) : x, y - 2 + (i * (nSize + space)));
 				}
 			
 				lc++;

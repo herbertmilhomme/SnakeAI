@@ -144,8 +144,8 @@ namespace SnakeAI.WinForms
 
 	public enum eDirection
 	{
-		Down,
 		Up,
+		Down,
 		Left,
 		Right
 	};
