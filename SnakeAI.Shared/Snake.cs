@@ -5,7 +5,16 @@ namespace SnakeAI.Shared
 {
 	public abstract class Snake : ISnake
 	{
-		public virtual int score { get { return Length - 1; } }
+		public virtual int score 
+		{ 
+			get
+			{
+				int num = Length - 1;
+				if (num > Core.highscore)
+					Core.highscore = num;
+				return num; 
+			} 
+		}
 		/// <summary>
 		/// amount of moves the snake can make before it dies
 		/// </summary>
@@ -22,7 +31,7 @@ namespace SnakeAI.Shared
 
 		public virtual float fitness { get; set; }
 
-		public virtual bool dead { get; set; }
+		public virtual bool dead { get; private set; }
 		/// <summary>
 		/// if this snake is a replay of best snake
 		/// </summary>
@@ -170,21 +179,21 @@ namespace SnakeAI.Shared
 		/*// <summary>
 		/// show the snake
 		/// </summary>
-		public abstract void show();*/
-		//{
-		//	//food.show();
-		//	//fill(255);
-		//	//stroke(0);
-		//	//for (int i = 0; i < body.Count; i++) {
-		//	//	rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
-		//	//}
-		//	//if (dead) {
-		//	//	fill(150);
-		//	//} else {
-		//	//	fill(255);
-		//	//}
-		//	//rect(head.x, head.y, Core.SIZE, Core.SIZE);
-		//}
+		public abstract void show();
+		{
+			//food.show();
+			//fill(255);
+			//stroke(0);
+			//for (int i = 0; i < body.Count; i++) {
+			//	rect(body[i].x, body[i].y, Core.SIZE, Core.SIZE);
+			//}
+			//if (dead) {
+			//	fill(150);
+			//} else {
+			//	fill(255);
+			//}
+			//rect(head.x, head.y, Core.SIZE, Core.SIZE);
+		}*/
 
 		/// <summary>
 		/// move the snake

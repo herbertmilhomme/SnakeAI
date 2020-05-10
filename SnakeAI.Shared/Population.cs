@@ -4,7 +4,7 @@ namespace SnakeAI.Shared
 	{
 		public Snake[] Snakes { get { return snakes; } }
 		protected Snake[] snakes { get; set; }
-		public Snake bestSnake;
+		public virtual ISnake bestSnake { get { return (Snake)snakes[0]; } }//; protected set; }
 
 		public int bestSnakeScore = 0;
 		public int gen = 0;
@@ -39,14 +39,10 @@ namespace SnakeAI.Shared
 		public bool done()
 		{  
 			for (int i = 0; i < snakes.Length; i++)
-			{
 				if (!snakes[i].dead)
 					return false;
-			}
-			if (!bestSnake.dead)
-			{
+			if (!((Snake)bestSnake).dead)
 				return false;
-			}
 			return true;
 		}
 
@@ -55,13 +51,14 @@ namespace SnakeAI.Shared
 		/// </summary>
 		public void update()
 		{  
-			if (!bestSnake.dead)
-			{  
-				//if the best snake is not dead update it, this snake is a replay of the best from the past generation
-				bestSnake.look();
-				bestSnake.think();
-				bestSnake.move();
-			}
+			//First snake is always from past generation... so code is redundant
+			//if (!bestSnake.dead)
+			//{  
+			//	//if the best snake is not dead update it, this snake is a replay of the best from the past generation
+			//	bestSnake.look();
+			//	bestSnake.think();
+			//	bestSnake.move();
+			//}
 			for (int i = 0; i < snakes.Length; i++)
 				if (!snakes[i].dead)
 				{
@@ -99,24 +96,24 @@ namespace SnakeAI.Shared
 			float max = 0;
 			int maxIndex = 0;
 			for (int i = 0; i < snakes.Length; i++)
-			{
 				if (snakes[i].fitness > max)
 				{
 					max = snakes[i].fitness;
 					maxIndex = i;
 				}
-			}
 			if (max > bestFitness)
 			{
 				bestFitness = max;
-				bestSnake = (Snake)snakes[maxIndex].cloneForReplay();
+				//bestSnake = (Snake)snakes[maxIndex].cloneForReplay();
+				snakes[0] = (Snake)snakes[maxIndex].cloneForReplay();
 				bestSnakeScore = snakes[maxIndex].score;
 				samebest = 0;
 				Core.mutationRate = Core.defaultmutation;
 			}
 			else
 			{
-				bestSnake = (Snake)bestSnake.cloneForReplay();
+				//bestSnake = (Snake)bestSnake.cloneForReplay();
+				snakes[0] = (Snake)bestSnake.cloneForReplay();
 				samebest++;
 				//if the best snake has remained the same for more than 3 generations, raise the mutation rate
 				if(samebest > 2) {  
@@ -146,6 +143,9 @@ namespace SnakeAI.Shared
 			return snakes[0];
 		}
 
+		/// <summary>
+		/// progresses all of the neural map into new model, and keeps copy of first from previous
+		/// </summary>
 		public void naturalSelection()
 		{
 			Snake[] newSnakes = new Snake[snakes.Length];
@@ -159,10 +159,10 @@ namespace SnakeAI.Shared
 			{
 				Snake child = (Snake)selectParent().crossover(selectParent());
 				child.mutate();
-				newSnakes[i] = child;
+				newSnakes[i] = (Snake)child.Clone(); //Copy brain, reset snake
 			}
 			//snakes = newSnakes.Clone();
-			snakes = new System.Collections.Generic.List<Snake>(newSnakes).ToArray();
+			snakes = newSnakes; //new System.Collections.Generic.List<Snake>(newSnakes).ToArray();
 			Core.evolution.Add(bestSnakeScore);
 			gen += 1;
 		}

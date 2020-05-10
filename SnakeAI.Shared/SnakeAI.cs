@@ -36,10 +36,9 @@ namespace SnakeAI.Shared
 		public static bool seeVision = true;
 		public static bool modelLoaded = false;
 
-		//PFont font;
-
 		public static List<int> evolution { get; set; }
 
+		//PFont font;
 		//Button graphButton;
 		//Button loadButton;
 		//Button saveButton;

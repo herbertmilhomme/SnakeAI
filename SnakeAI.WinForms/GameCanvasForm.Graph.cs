@@ -16,7 +16,7 @@ namespace SnakeAI.WinForms
 			
 			
 				#region Neural Net
-				int x = 0;
+				int x = 5;
 				int y = 200;
 				int w = 360;
 				int h = ClientSize.Height - 410; //790;
@@ -116,7 +116,7 @@ namespace SnakeAI.WinForms
 							if (snake.brain.weights[a].matrix[i][j] < 0)
 								stroke = Pens.Blue; //(255, 0, 0);
 							else if (snake.brain.weights[a].matrix[i][j] > 0)
-								stroke = Pens.Blue; //(0, 0, 255);
+								stroke = Pens.Red; //(0, 0, 255);
 							else
 								stroke = Pens.White;
 							canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
@@ -131,7 +131,7 @@ namespace SnakeAI.WinForms
 						if (snake.brain.weights[snake.brain.weights.Length - 1].matrix[i][j] < 0)
 							stroke = Pens.Blue; //(255, 0, 0);
 						else if (snake.brain.weights[snake.brain.weights.Length - 1].matrix[i][j] > 0)
-							stroke = Pens.Blue; //(0, 0, 255);
+							stroke = Pens.Red; //(0, 0, 255);
 						else
 							stroke = Pens.White;
 						canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));

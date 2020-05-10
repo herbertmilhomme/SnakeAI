@@ -85,6 +85,8 @@ namespace SnakeAI.WinForms
 				GameManager.pop = new Population(2000);
 				graph.Show();
 				save.Show();
+				IncreaseBut.Show();
+				DecreaseBut.Show();
 			}
 
 			//GenerateFruit();
@@ -120,11 +122,11 @@ namespace SnakeAI.WinForms
 					GameManager.snake.move();//DoMove();
 					ScoreLabel.Text = string.Format("SCORE: {0}", ((Snake)GameManager.snake).score.ToString());
 					//ScoreLabel.Text = string.Format("SCORE: {0}", (m_Snake.Length - 1).ToString());
-					if (((Snake)GameManager.snake).score > GameManager.highscore)
-					{
-						GameManager.highscore = ((Snake)GameManager.snake).score;
+					//if (((Snake)GameManager.snake).score > GameManager.highscore)
+					//{
+					//	GameManager.highscore = ((Snake)GameManager.snake).score;
 						HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", GameManager.highscore.ToString());
-					}
+					//}
 				}
 			}
 			else
@@ -133,7 +135,7 @@ namespace SnakeAI.WinForms
 				{
 					if (GameManager.pop.done())
 					{
-						GameManager.highscore = GameManager.pop.bestSnake.score;
+						//GameManager.highscore = GameManager.pop.bestSnake.score;
 						GameManager.pop.calculateFitness();
 						GameManager.pop.naturalSelection();
 					}
@@ -146,13 +148,15 @@ namespace SnakeAI.WinForms
 						{
 							//GameManager.pop.bestSnake.show();
 							//show the brain of the best snake
+							//ToDo: if main snake dies, switch to snake with highest score OR first snake not dead?
 							//bestSnake.brain.show(0, 0, 360, 790, bestSnake.vision, bestSnake.decision);
 							GameManager.snake = GameManager.pop.bestSnake; //vision = m_GameManager.pop.bestSnake.vision; decision = m_GameManager.pop.bestSnake.decision;
 							Background.Invalidate(); //Canvas.Invalidate();
 							//for (int j = 0; j < GameManager.snake.body.Count; j++)
 							//for (int j = GameManager.snake.Length - 1; j >= 1; j--)
 							//	GameManager.snake.body[j] = new Shared.Vector() { x = GameManager.snake.body[j - 1].x, y = GameManager.snake.body[j - 1].y };
-							System.Threading.Thread.Sleep(GameTimer.Interval);
+							if(!((Snake)GameManager.snake).dead)
+								System.Threading.Thread.Sleep(GameTimer.Interval);
 							//Canvas.Invalidate(); Background.Invalidate();
 						}
 						else
@@ -171,8 +175,8 @@ namespace SnakeAI.WinForms
 					GenLabel.Text = string.Format("GEN: {0}", GameManager.pop.gen.ToString());
 					ScoreLabel.Text = string.Format("SCORE: {0}", GameManager.pop.bestSnakeScore.ToString());
 					HighscoreLabel.Text = string.Format("HIGHSCORE: {0}", GameManager.highscore.ToString());
-					IncreaseBut.Show();
-					DecreaseBut.Show();
+					//IncreaseBut.Show();
+					//DecreaseBut.Show();
 				}
 				else
 				{
@@ -221,7 +225,7 @@ namespace SnakeAI.WinForms
 			//ControlPaint.DrawBorder(canvas, Canvas.Bounds, Color.White, ButtonBorderStyle.Solid);
 			ControlPaint.DrawBorder(canvas, new Rectangle(0, 0, Canvas.Size.Width, Canvas.Size.Height), Color.White, ButtonBorderStyle.Solid);
 			#region Snake Game
-			if (!GameManager.GameOver)
+			if (!GameManager.GameOver || !GameManager.humanPlaying)
 			{
 				for (int i = 0; i < GameManager.snake.Length; i++)
 				{
