@@ -17,7 +17,7 @@ namespace SnakeAI.WinForms
 			
 				#region Neural Net
 				int x = 5;
-				int y = 200;
+				int y = 140;
 				int w = 360;
 				int h = ClientSize.Height - 410; //790;
 				Snake snake = (Snake)GameManager.snake;
@@ -53,12 +53,12 @@ namespace SnakeAI.WinForms
 						//color = Brushes.Black; 
 					//stroke(0);
 					//ellipseMode(CORNER);
-					canvas.FillEllipse(fill, new Rectangle((int)x, (int)y + (int)(i * (nSize + space)), (int)nSize, (int)nSize));
+					canvas.FillEllipse(fill, new Rectangle((int)x, (int)y + (int)(i * (nSize + space * 2)), (int)nSize, (int)nSize));
 					//textSize(nSize / 2);
 					//textAlign(CENTER, CENTER);
 					//fill(0);
 					//Text = string.Format(i.ToString());//, x + (nSize / 2), y + (nSize / 2) + (i * (nSize + space))
-					canvas.DrawString(i.ToString(), new Font("Agency FB", nSize, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), color, i < 10 ? x + (int)(nSize * .25) : x, y - 2 + (i * (nSize + space)));
+					canvas.DrawString(i.ToString(), new Font("Agency FB", nSize, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), color, i < 10 ? x + (int)(nSize * .25) : x, y - 2 + (i * (nSize + space * 2)));
 				}
 			
 				lc++;
@@ -71,7 +71,7 @@ namespace SnakeAI.WinForms
 						fill = Brushes.White; //(255);
 						//stroke(0);
 						//ellipseMode(CORNER);
-						canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSize) + (lc * nSpace)), (int)(y + hBuff + (i * (nSize + space))), (int)nSize, (int)nSize));
+						canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSize) + (lc * nSpace)), (int)(y + hBuff + (i * (nSize + space * 2))), (int)nSize, (int)nSize));
 					}
 					lc++;
 				}
@@ -85,7 +85,7 @@ namespace SnakeAI.WinForms
 						fill = Brushes.White; //(255);
 					//stroke(0);
 					//ellipseMode(CORNER);
-					canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSpace) + (lc * nSize)), (int)(y + oBuff + (i * (nSize + space))), (int)nSize, (int)nSize));
+					canvas.FillEllipse(fill, new Rectangle((int)(x + (lc * nSpace) + (lc * nSize)), (int)(y + oBuff + (i * (nSize + space * 2))), (int)nSize, (int)nSize));
 				}
 			
 				lc = 1;
@@ -102,7 +102,7 @@ namespace SnakeAI.WinForms
 							stroke = Pens.Red; //(0, 0, 255);
 						else
 							stroke = Pens.White;
-						canvas.DrawLine(stroke, x1: x + nSize, y1: y + (nSize / 2) + (j * (space + nSize)), x2: x + nSize + nSpace, y2: y + hBuff + (nSize / 2) + (i * (space + nSize)));
+						canvas.DrawLine(stroke, x1: x + nSize, y1: y + (nSize / 2) + (j * (nSize + space * 2)), x2: x + nSize + nSpace, y2: y + hBuff + (nSize / 2) + (i * (nSize + space * 2)));
 					}
 			
 				lc++;
@@ -119,7 +119,7 @@ namespace SnakeAI.WinForms
 								stroke = Pens.Red; //(0, 0, 255);
 							else
 								stroke = Pens.White;
-							canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (space + nSize)));
+							canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (nSize + space * 2)), x + (lc * nSize) + (lc * nSpace), y + hBuff + (nSize / 2) + (i * (nSize + space * 2)));
 						}
 					lc++;
 				}
@@ -134,7 +134,7 @@ namespace SnakeAI.WinForms
 							stroke = Pens.Red; //(0, 0, 255);
 						else
 							stroke = Pens.White;
-						canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (space + nSize)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (space + nSize)));
+						canvas.DrawLine(stroke, x1: x + (lc * nSize) + ((lc - 1) * nSpace), y + hBuff + (nSize / 2) + (j * (nSize + space * 2)), x + (lc * nSize) + (lc * nSpace), y + oBuff + (nSize / 2) + (i * (nSize + space * 2)));
 					}
 
 				//fill(0);
@@ -145,9 +145,9 @@ namespace SnakeAI.WinForms
 				//Text = string.Format("L"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (2 * space) + (2 * nSize) + (nSize / 2));
 				//Text = string.Format("R"); //, x + (lc * nSize) + (lc * nSpace) + nSize / 2, y + oBuff + (3 * space) + (3 * nSize) + (nSize / 2));
 				canvas.DrawString("U", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (nSize / 2));
-				canvas.DrawString("D", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + space + nSize + (nSize / 2));
-				canvas.DrawString("L", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (2 * space) + (2 * nSize) + (nSize / 2));
-				canvas.DrawString("R", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (3 * space) + (3 * nSize) + (nSize / 2));
+				canvas.DrawString("D", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (space * 2) + nSize + (nSize / 2));
+				canvas.DrawString("L", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (space * 2 * 2) + (2 * nSize) + (nSize / 2));
+				canvas.DrawString("R", new Font("Agency FB", 15F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(0))), Brushes.White, x + (lc * nSize) + (lc * nSpace) + (int)(nSize * .5) + 10, y + (-8) + oBuff + (space * 2 * 3) + (3 * nSize) + (nSize / 2));
 				#endregion
 			}
 		}

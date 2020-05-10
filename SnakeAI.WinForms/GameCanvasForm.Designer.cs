@@ -235,7 +235,7 @@ namespace SnakeAI.WinForms
 			this.MutationLabel.Name = "MutationLabel";
 			this.MutationLabel.Size = new System.Drawing.Size(136, 24);
 			this.MutationLabel.TabIndex = 0;
-			this.MutationLabel.Text = "MUTATION RATE: 0%";
+			this.MutationLabel.Text = string.Format("MUTATION RATE: {0}%", (GameManager.defaultmutation * 100).ToString());
 			this.MutationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// GameCanvasForm
